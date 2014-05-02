@@ -1,5 +1,6 @@
 package sd.emse.shokoban;
 
-public class Wall {
-
+public class Wall extends Shape {
+	private Collision collision;
+	
 }
