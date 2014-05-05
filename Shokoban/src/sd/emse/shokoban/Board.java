@@ -3,6 +3,9 @@ package sd.emse.shokoban;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import ejemplo.Java2DExample;
@@ -15,6 +18,7 @@ public class Board extends Shape {
 	public static final int unitSize = 80;
 	private JFrame mainPanel;
 	private ArrayList<Shape> shapes = new ArrayList<Shape>();
+	private Player player;
 	
 	public int getWidth() {
 		return width;
@@ -48,11 +52,12 @@ public class Board extends Shape {
 	
 	public void createInitialBoard () {
 		this.createPanel();
-		this.createWalls();
+		this.createPlayer();
 		this.createBoxes();
+		this.createWalls();
 		this.createStorages();
 		
-		this.createPlayer();
+		
 		this.mainPanel.setVisible(true);
 	}
 	
@@ -64,7 +69,46 @@ public class Board extends Shape {
 	    this.mainPanel.setLayout(null);
 		this.mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.mainPanel.setResizable(false);
+		this.mainPanel.addKeyListener(new BoardAdapter());
 		
+	}
+	
+	class BoardAdapter extends KeyAdapter {
+
+		public void keyPressed(KeyEvent e) {
+			Position position = player.getPosition();
+			switch (e.getKeyCode()) {
+
+			case KeyEvent.VK_UP:
+				position.setY(position.getY() - 1);
+				break;
+			case KeyEvent.VK_DOWN:
+				position.setY(position.getY() + 1);				
+				break;
+			case KeyEvent.VK_LEFT:
+				position.setX(position.getX() - 1);	
+				break;
+			case KeyEvent.VK_RIGHT:
+				position.setX(position.getX() + 1);	
+				break;
+			default:
+				break;
+			}
+			if (position.getY() <= 0) {
+				position.setY(0);
+			} else if (position.getY() > (height - 1)) {
+				position.setY(height - 1);
+			} 
+			
+			if (position.getX() <= 0) {
+				position.setX(0);
+			} else if (position.getX() > (width - 1)) {
+				position.setX(width - 1);
+			} 
+			player.setPosition(position);
+			player.draw(mainPanel);
+			mainPanel.repaint();
+		}
 	}
 	
 	public void createWalls () {
@@ -158,6 +202,7 @@ public class Board extends Shape {
 			Player player = new Player(position);
 			player.draw(this.mainPanel);
 			this.shapes.add(player);
+			this.player = player;
 		}
 	}
 

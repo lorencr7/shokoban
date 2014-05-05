@@ -9,6 +9,7 @@ import ejemplo.ImagePanel;
 public class Shape {
 	private Position position;
 	private String imageName;
+	private JLabel image;
 
 	public Position getPosition() {
 		return position;
@@ -36,22 +37,13 @@ public class Shape {
 	}
 
 	public void draw(JFrame container) {
+		if (this.image == null) {
+			ImageIcon imageIcon = new ImageIcon(this.imageName);
+			this.image = new JLabel(imageIcon);
+			container.getContentPane().add(this.image);
+		}
 		System.out.println("drawing " + this.imageName);
-		ImageIcon imageIcon = new ImageIcon(this.imageName);
-		JLabel label = new JLabel(imageIcon);
-		//label.setLocation(, );
-		label.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
-		//label.setSize(80, 80);
-		//label.setVisible(true);
-		container.getContentPane().add(label);
-		
-		/*ImagePanel imagePanel = new ImagePanel();
-		imagePanel.createImage(this.imageName);
-		imagePanel.setX(this.position.getLengthX());
-		imagePanel.setY(this.position.getLengthY());
-		container.getContentPane().add(imagePanel);*/
-		
-		//container.setVisible(true);
+		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
 	}
 	
 	public void move(Direction direction) {
