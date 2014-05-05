@@ -13,5 +13,6 @@ public class Java2DExample extends JFrame {
 	// start program
 	public static void main(String args[]) {
 		Board board = new Board(8, 9);
+		board.draw(null);
 	}
 }

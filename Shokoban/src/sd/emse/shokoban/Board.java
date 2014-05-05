@@ -39,14 +39,19 @@ public class Board extends Shape {
 		super();
 		this.width = width;
 		this.height = height;
+		//this.createInitialBoard();
+	}
+	@Override
+	public void draw(JFrame container) {
 		this.createInitialBoard();
 	}
 	
 	public void createInitialBoard () {
 		this.createPanel();
 		this.createWalls();
-		this.createStorages();
 		this.createBoxes();
+		this.createStorages();
+		
 		this.createPlayer();
 		this.mainPanel.setVisible(true);
 	}
@@ -117,7 +122,7 @@ public class Board extends Shape {
 	public void createStorages () {
 		ArrayList<Position> positions = new ArrayList<Position>();
 		positions.add(new Position(1,2));
-		positions.add(new Position(4,6));
+		positions.add(new Position(6,4));
 		positions.add(new Position(1,4));
 		positions.add(new Position(4,5));
 		positions.add(new Position(3,6));
