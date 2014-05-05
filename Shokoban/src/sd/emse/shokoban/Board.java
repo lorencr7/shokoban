@@ -53,9 +53,12 @@ public class Board extends Shape {
 	
 	public void createPanel () {
 		this.mainPanel = new JFrame("Sokoban");
-		this.mainPanel.setBounds(0, 0, this.width*unitSize, this.height*unitSize);
+		this.mainPanel.setBounds(0, 0, this.width*unitSize, this.height*unitSize + 20);
+		//this.mainPanel.setBackground(new Color(83, 83, 83));
+		//this.mainPanel.pack();
 	    this.mainPanel.setLayout(null);
 		this.mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.mainPanel.setResizable(false);
 		
 	}
 	
