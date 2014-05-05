@@ -5,6 +5,6 @@ public class Player extends Shape{
 
 	public Player(Position position) {
 		super(position);
-		this.setImageName("sokoban/player.jpg");
+		this.setImageName("sokoban/player.png");
 	}
 }
