@@ -11,7 +11,7 @@ public class Board extends Shape {
 	private int height;
 	public static final int unitSize = 80;
 	private JFrame mainPanel;
-	private ArrayList<Shape> shapes;
+	private ArrayList<Shape> shapes = new ArrayList<Shape>();
 	
 	public int getWidth() {
 		return width;
@@ -48,10 +48,8 @@ public class Board extends Shape {
 	}
 	
 	public void createPanel () {
-		this.mainPanel = new Java2DExample();
-		
+		this.mainPanel = new JFrame("Sokoban");		
 		this.mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.mainPanel.pack();
 		this.mainPanel.setSize(this.width*unitSize, this.height*unitSize);
 		this.mainPanel.setResizable(false);
 		this.mainPanel.setVisible(true);
