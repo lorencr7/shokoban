@@ -1,6 +1,8 @@
 package sd.emse.shokoban;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import ejemplo.ImagePanel;
 
@@ -35,11 +37,21 @@ public class Shape {
 
 	public void draw(JFrame container) {
 		System.out.println("drawing " + this.imageName);
-		ImagePanel imagePanel = new ImagePanel();
+		ImageIcon imageIcon = new ImageIcon(this.imageName);
+		JLabel label = new JLabel(imageIcon);
+		//label.setLocation(, );
+		label.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
+		//label.setSize(80, 80);
+		//label.setVisible(true);
+		container.getContentPane().add(label);
+		
+		/*ImagePanel imagePanel = new ImagePanel();
 		imagePanel.createImage(this.imageName);
 		imagePanel.setX(this.position.getLengthX());
 		imagePanel.setY(this.position.getLengthY());
-		container.getContentPane().add(imagePanel);
+		container.getContentPane().add(imagePanel);*/
+		
+		//container.setVisible(true);
 	}
 	
 	public void move(Direction direction) {

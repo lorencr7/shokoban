@@ -1,5 +1,8 @@
 package sd.emse.shokoban;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import ejemplo.Java2DExample;
@@ -45,14 +48,15 @@ public class Board extends Shape {
 		this.createStorages();
 		this.createBoxes();
 		this.createPlayer();
+		this.mainPanel.setVisible(true);
 	}
 	
 	public void createPanel () {
-		this.mainPanel = new JFrame("Sokoban");		
+		this.mainPanel = new JFrame("Sokoban");
+		this.mainPanel.setBounds(0, 0, this.width*unitSize, this.height*unitSize);
+	    this.mainPanel.setLayout(null);
 		this.mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.mainPanel.setSize(this.width*unitSize, this.height*unitSize);
-		this.mainPanel.setResizable(false);
-		this.mainPanel.setVisible(true);
+		
 	}
 	
 	public void createWalls () {
