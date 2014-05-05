@@ -1,4 +1,5 @@
 package example.refactor;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,7 +24,7 @@ public class Canvas extends JPanel {
 		addKeyListener(new BoardAdapter());
 		setFocusable(true);
 		mediaTracker = new MediaTracker(this);
-	} 
+	}
 
 	public void createImage(String imageURL) {
 		image = Toolkit.getDefaultToolkit().createImage(imageURL);
@@ -62,7 +63,7 @@ public class Canvas extends JPanel {
 		super.paintComponent(g);
 		Graphics2D graphics = (Graphics2D) g;
 
-		graphics.drawImage(originalImage, x, y , null);
+		graphics.drawImage(originalImage, x, y, null);
 	}
 
 	// get preferred ImagePanel size
@@ -126,7 +127,18 @@ public class Canvas extends JPanel {
 			default:
 				break;
 			}
+			if (y <= 0) {
+				y = 0;
+			} else if (y >= 511) {
+				y = 511;
+			} 
 			
+			if (x <= 0) {
+				x = 0;
+			} else if (x >= 723) {
+				x = 723;
+			}
+
 			repaint();
 		}
 	}
