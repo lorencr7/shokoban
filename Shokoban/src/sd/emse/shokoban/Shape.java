@@ -4,8 +4,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import ejemplo.ImagePanel;
-
 public class Shape {
 	private Position position;
 	private String imageName;
@@ -46,7 +44,17 @@ public class Shape {
 		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
 	}
 	
-	public void move(Direction direction) {
+	public void move(Integer dir) {
 		
+		if (Direction.NORTH == dir|| Direction.SOUTH == dir ) {
+			this.position.setY(this.position.getY() + dir);
+		}
+		
+		if (Direction.EAST == dir|| Direction.WEST == dir ) {
+			this.position.setX(this.position.getX() + dir);
+		}
+		
+		
+	
 	}
 }
