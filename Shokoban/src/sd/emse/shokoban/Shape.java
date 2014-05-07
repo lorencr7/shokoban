@@ -42,6 +42,7 @@ public class Shape {
 		}
 		System.out.println("drawing " + this.imageName);
 		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
+		container.repaint();
 	}
 	
 	public void move(Integer dir) {

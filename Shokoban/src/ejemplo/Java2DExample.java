@@ -1,8 +1,8 @@
 package ejemplo;
 
-import javax.swing.*;
+import javax.swing.JFrame;
 
-import sd.emse.shokoban.Board;
+import model.GameController;
 
 public class Java2DExample extends JFrame {
 	/**
@@ -12,7 +12,7 @@ public class Java2DExample extends JFrame {
 
 	// start program
 	public static void main(String args[]) {
-		Board board = new Board(8, 9);
-		board.draw(null);
+		GameController game = new GameController(8, 9);
+		game.draw(null);
 	}
 }
