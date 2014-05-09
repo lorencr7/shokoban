@@ -1,14 +1,11 @@
 package example.refactor;
-
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -16,45 +13,15 @@ public class Canvas extends JPanel {
 
 	private static final long serialVersionUID = -6960082725415143691L;
 	private Image image; // image to load
-	private BufferedImage originalImage; // original image
-	private MediaTracker mediaTracker;
 	private int x, y;
 
 	public Canvas() {
 		addKeyListener(new BoardAdapter());
 		setFocusable(true);
-		mediaTracker = new MediaTracker(this);
-	}
+	} 
 
 	public void createImage(String imageURL) {
 		image = Toolkit.getDefaultToolkit().createImage(imageURL);
-		mediaTracker.addImage(image, 0);
-
-		// wait for Image to load
-		try {
-			mediaTracker.waitForAll();
-		}
-
-		// exit program on error
-		catch (InterruptedException interruptedException) {
-			interruptedException.printStackTrace();
-		}
-
-		// create BufferedImages from Image
-		originalImage = new BufferedImage(image.getWidth(null),
-				image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-		// get BufferedImage’s graphics context
-		Graphics2D graphics = originalImage.createGraphics();
-		graphics.drawImage(image, x, y, null);
-	}
-
-	// NOT USED
-	public void displayOriginalImage() {
-		originalImage = new BufferedImage(image.getWidth(null),
-				image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-
-		Graphics2D graphics = originalImage.createGraphics();
-		graphics.drawImage(originalImage, null, null);
 		repaint();
 	}
 
@@ -62,17 +29,15 @@ public class Canvas extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D graphics = (Graphics2D) g;
-
-		graphics.drawImage(originalImage, x, y, null);
+		graphics.drawImage(image, x, y , null);
+		repaint();
 	}
 
-	// get preferred ImagePanel size
 	public Dimension getPreferredSize() {
-		return new Dimension(originalImage.getWidth(),
-				originalImage.getHeight());
+		return new Dimension(image.getWidth(null),
+				image.getHeight(null));
 	}
 
-	// get minimum ImagePanel size
 	public Dimension getMinimumSize() {
 		return getPreferredSize();
 	}
@@ -138,7 +103,7 @@ public class Canvas extends JPanel {
 			} else if (x >= 723) {
 				x = 723;
 			}
-
+			
 			repaint();
 		}
 	}

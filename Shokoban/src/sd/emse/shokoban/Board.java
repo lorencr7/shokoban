@@ -45,4 +45,12 @@ public class Board extends Shape {
 		// this.createInitialBoard();
 	}
 
+	public Shape getShapeAt(Position p) {
+		for (Shape s : this.shapes) {
+			if (s.getPosition().equals(p)) {
+				return s;
+			}
+		}
+		return null;
+	}
 }
