@@ -24,4 +24,12 @@ public class Board extends Shape {
 		super.draw(container);
 	}
 
+	public Shape getShapeAt(Position p) {
+		for (Shape s : this.shapes) {
+			if (s.getPosition().equals(p)) {
+				return s;
+			}
+		}
+		return null;
+	}
 }
