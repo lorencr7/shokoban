@@ -1,11 +1,10 @@
 package sd.emse.shokoban;
 
-
+import model.GameController;
 
 public class Position {
 	private int x;
 	private int y;
-	
 
 	public int getX() {
 		return x;
@@ -30,12 +29,33 @@ public class Position {
 	}
 
 	public int getLengthX() {
-		return this.x * Board.unitSize;
+		return this.x * GameController.unitSize;
 	}
 
 	public int getLengthY() {
-		return this.y * Board.unitSize;
+		return this.y * GameController.unitSize;
 	}
 
+	public Position obtainNewPosition(Position pos, String direction) {
+		Position posAux = new Position(pos.getX(), pos.getY());
+		switch (direction) {
+		case "North":
+			posAux.setY(posAux.getY() - 1);
+			break;
+		case "South":
+			posAux.setY(posAux.getY() + 1);
+			break;
+
+		case "East":
+			posAux.setX(posAux.getX() + 1);
+			break;
+		case "West":
+			posAux.setX(posAux.getX() - 1);
+			break;
+		default:
+			break;
+		}
+		return posAux;
+	}
 
 }

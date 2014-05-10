@@ -3,8 +3,6 @@
  */
 package model;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -24,13 +22,42 @@ public class GameController {
 	// shapes contained in model
 	private Board board;
 	private Collision collision;
-	private static JFrame mainPanel;
+	private JFrame mainPanel;
 	public static final int unitSize = 80;
+	private int width;
+	private int height;
+	private static GameController gameController = null;
+	//private PlayerAdapter playerListener;
+
+	public static GameController getInstance() {
+		if (gameController == null) {
+			gameController = new GameController(8, 9);
+		}
+		return gameController;
+	}
 
 	// no-argument constructor
-	public GameController(int x, int y) {
-		this.board = new Board(x, y);
-		this.collision = new Collision();
+	private GameController(int x, int y) {
+		width = x;
+		height = y;
+		board = new Board(x, y);
+		collision = new Collision();
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	/**
@@ -64,25 +91,24 @@ public class GameController {
 	}
 
 	public void createInitialBoard() {
-		this.createPanel();
-		this.createBoxes();
-		this.createWalls();
-		this.createStorages();
-		this.createPlayer();
-
-		GameController.mainPanel.setVisible(true);
+		createPanel();
+		createBoxes();
+		createWalls();
+		createStorages();
+		createPlayer();
+//		getMainPanel().addKeyListener(new PlayerAdapter());
+		mainPanel.setVisible(true);
 	}
 
 	public void createPanel() {
-		GameController.mainPanel = new JFrame("Sokoban");
-		GameController.mainPanel.setBounds(0, 0,
-				this.board.getWidth() * unitSize, this.board.getHeight()
-						* unitSize + 20);
-		// this.mainPanel.setBackground(new Color(83, 83, 83));
-		// this.mainPanel.pack();
-		GameController.mainPanel.setLayout(null);
-		GameController.mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GameController.mainPanel.setResizable(false);
+		mainPanel = new JFrame("Sokoban");
+		mainPanel.setBounds(0, 0, getWidth() * unitSize, getHeight() * unitSize
+				+ 20);
+		// mainPanel.setBackground(new Color(83, 83, 83));
+		// mainPanel.pack();
+		mainPanel.setLayout(null);
+		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainPanel.setResizable(false);
 		// SokobanModel.mainPanel.addKeyListener(new BoardAdapter());
 
 	}
@@ -134,8 +160,8 @@ public class GameController {
 
 		for (Position position : positions) {
 			Wall wall = new Wall(position);
-			wall.draw(GameController.mainPanel);
-			this.board.getShapes().add(wall);
+			wall.draw(mainPanel);
+			board.getShapes().add(wall);
 		}
 	}
 
@@ -150,8 +176,8 @@ public class GameController {
 		positions.add(new Position(4, 7));
 		for (Position position : positions) {
 			Storage storage = new Storage(position);
-			storage.draw(GameController.mainPanel);
-			this.board.getShapes().add(storage);
+			storage.draw(mainPanel);
+			board.getShapes().add(storage);
 		}
 	}
 
@@ -166,8 +192,8 @@ public class GameController {
 		positions.add(new Position(5, 6));
 		for (Position position : positions) {
 			Box box = new Box(position);
-			box.draw(GameController.mainPanel);
-			this.board.getShapes().add(box);
+			box.draw(mainPanel);
+			board.getShapes().add(box);
 		}
 	}
 
@@ -176,67 +202,162 @@ public class GameController {
 		positions.add(new Position(2, 2));
 		for (Position position : positions) {
 			Player player = new Player(position);
-			player.draw(GameController.mainPanel);
-			this.board.getShapes().add(player);
-			// this.player = player;
+			player.draw(mainPanel);
+			board.getShapes().add(player);
+			// player = player;
 		}
 	}
 
-	public boolean move(Shape shape1, Integer dir) {
-		Position next = shape1.getPosition();
+	public void draw(JFrame container) {
+		createInitialBoard();
+	}
 
-		Shape shape2 = this.getNextShape(next, dir);
+	/**
+	 * @return the mainPanel
+	 */
+	public JFrame getMainPanel() {
+		return mainPanel;
+	}
 
-		if (collision.collide(shape1, shape2)) {
+	public boolean move(Shape player, String dir) {
+		Position next = player.getPosition();
+
+		Shape shape2 = getNextShape(next, dir);
+
+		if (collision.collide(player, shape2)) {
 			// Push
 			next = shape2.getPosition();
-			Shape shape3 =this.getNextShape(next, dir);
+			Shape shape3 = getNextShape(next, dir);
 			if (collision.collide(shape2, shape3)) {
 				return false;
 			} else {
 				// move shape 1 and shape 2
 				shape2.move(dir);
-				shape1.move(dir);
+				player.move(dir);
 				return true;
 			}
 		}
 		// simple move
-		shape1.move(dir);
+		player.move(dir);
 		return true;
 
 	}
 
-	public void draw(JFrame container) {
-		this.createInitialBoard();
+	public void collide(Shape shape1, String direction) {
+		Position next = shape1.getPosition();
+
+		Shape shape2 = getNextShape(next, direction);
+
+		if (collision.collide(shape1, shape2)) {
+			// Push
+			next = shape2.getPosition();
+			Shape shape3 = getNextShape(next, direction);
+			if (collision.collide(shape2, shape3)) {
+				return;
+			} else {
+				// move shape 1 and shape 2
+				shape2.move(direction);
+				shape1.move(direction);
+				return;
+			}
+		}
+		// simple move
+		shape1.move(direction);
 	}
-	
-	/**
-	 * @return the mainPanel
-	 */
-	public static JFrame getMainPanel() {
-		return mainPanel;
-	}
-	
+
 	/**
 	 * @param pos
-	 * @param dir
+	 * @param direction
 	 * @return
 	 */
-	public Shape getNextShape(Position pos, Integer dir) {
+	public Shape getNextShape(Position pos, String direction) {
 
-		if (Direction.NORTH == dir || Direction.SOUTH == dir) {
-			pos.setY(pos.getY() + dir);
+		
+		switch (direction) {
+		case "North":
+			pos.setY(pos.getY() - 1);
+			break;
+		case "South":
+			pos.setY(pos.getY() + 1);
+			break;
+
+		case "East":
+			pos.setX(pos.getX() + 1);
+			break;
+		case "West":
+			pos.setX(pos.getX() - 1);
+			break;
+
+		default:
+			break;
 		}
-
-		if (Direction.EAST == dir || Direction.WEST == dir) {
-			pos.setX(pos.getX() + dir);
-		}
-
-		for (Shape s : this.board.getShapes()) {
+		
+		
+		for (Shape s : board.getShapes()) {
 			if (s.getPosition().equals(pos)) {
 				return s;
 			}
 		}
 		return null;
 	}
+
+//	class PlayerAdapter extends KeyAdapter {
+//
+//		/**
+//		 * 
+//		 */
+//		public PlayerAdapter() {
+//
+//		}
+//
+//		public void keyPressed(KeyEvent e) {
+//			Shape player = (Shape) getBoard().getShapes().get(
+//					getBoard().getShapes().size() - 1);
+//
+//			if (player.pos.getY() <= 0) {
+//				player.pos.setY(0);
+//			} else if (player.pos.getY() > (getHeight() - 1)) {
+//				player.pos.setY(getHeight() - 1);
+//			}
+//
+//			if (player.pos.getX() <= 0) {
+//				player.pos.setX(0);
+//			} else if (player.pos.getX() > (getWidth() - 1)) {
+//				player.pos.setX(getWidth() - 1);
+//			}
+//
+//			switch (e.getKeyCode()) {
+//
+//			case KeyEvent.VK_UP:
+//
+//				collide(player, Direction.NORTH);
+//
+//				// pos.setY(pos.getY() - 1);
+//
+//				break;
+//			case KeyEvent.VK_DOWN:
+//
+//				collide(player, Direction.SOUTH);
+//				// pos.setY(pos.getY() + 1);
+//				break;
+//			case KeyEvent.VK_LEFT:
+//				collide(player, Direction.WEST);
+//				// pos.setX(pos.getX() - 1);
+//				break;
+//			case KeyEvent.VK_RIGHT:
+//				collide(player, Direction.EAST);
+//				// pos.setX(pos.getX() + 1);
+//				break;
+//			default:
+//				break;
+//			}
+//
+//			board.getShapes().get(
+//					getBoard().getShapes().size() - 1).setPosition(player.getPosition());
+//			board.getShapes().get(
+//					getBoard().getShapes().size() - 1).draw(getMainPanel());
+//			
+//		}
+//	}
+
 }

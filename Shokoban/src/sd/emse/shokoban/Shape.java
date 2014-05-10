@@ -16,7 +16,7 @@ public class Shape {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	
+
 	public String getImageName() {
 		return imageName;
 	}
@@ -41,21 +41,30 @@ public class Shape {
 			container.getContentPane().add(this.image);
 		}
 		System.out.println("drawing " + this.imageName);
-		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
+		this.image.setBounds(this.position.getLengthX(),
+				this.position.getLengthY(), 80, 80);
 		container.repaint();
 	}
-	
-	public void move(Integer dir) {
-		
-		if (Direction.NORTH == dir|| Direction.SOUTH == dir ) {
-			this.position.setY(this.position.getY() + dir);
+
+	public void move(String direction) {
+
+		switch (direction) {
+		case "North":
+			this.position.setY(this.position.getY() - 1);
+			break;
+		case "South":
+			this.position.setY(this.position.getY() + 1);
+			break;
+
+		case "East":
+			this.position.setX(this.position.getX() + 1);
+			break;
+		case "West":
+			this.position.setX(this.position.getX() - 1);
+			break;
+
+		default:
+			break;
 		}
-		
-		if (Direction.EAST == dir|| Direction.WEST == dir ) {
-			this.position.setX(this.position.getX() + dir);
-		}
-		
-		
-	
 	}
 }

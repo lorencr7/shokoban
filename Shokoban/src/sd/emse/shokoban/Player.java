@@ -5,71 +5,107 @@ import java.awt.event.KeyListener;
 
 import model.GameController;
 
-public class Player extends Shape implements KeyListener{
+public class Player extends Shape implements KeyListener {
 	private Collision collision;
 
 	public Player(Position position) {
 		super(position);
 		this.setImageName("sokoban/player.png");
-		GameController.getMainPanel().addKeyListener(this);
+		collision = new Collision();
+
+		GameController.getInstance().getMainPanel().addKeyListener(this);
+
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
-	 */
-	@Override
-	public void keyPressed(KeyEvent e) {
-		Position position = this.getPosition();
-		switch (e.getKeyCode()) {
+	public boolean collide(Shape shape) {
+		if (collision.collide(this, shape)) {
+			return true;
+		} else {
+			return false;
+		}
 
-		case KeyEvent.VK_UP:
-			position.setY(position.getY() - 1);
+	}
+
+	public void move(String direction) {
+
+		switch (direction) {
+		case "North":
+			this.getPosition().setY(this.getPosition().getY() - 1);
 			break;
-		case KeyEvent.VK_DOWN:
-			position.setY(position.getY() + 1);
+		case "South":
+			this.getPosition().setY(this.getPosition().getY() + 1);
 			break;
-		case KeyEvent.VK_LEFT:
-			position.setX(position.getX() - 1);
+
+		case "East":
+			this.getPosition().setX(this.getPosition().getX() + 1);
 			break;
-		case KeyEvent.VK_RIGHT:
-			position.setX(position.getX() + 1);
+		case "West":
+			this.getPosition().setX(this.getPosition().getX() - 1);
 			break;
+
 		default:
 			break;
 		}
-		
-		if (position.getY() <= 0) {
-			position.setY(0);
-		} else if (position.getY() > (Board.getHeight() - 1)) {
-			position.setY(Board.getHeight() - 1);
-		}
-
-		if (position.getX() <= 0) {
-			position.setX(0);
-		} else if (position.getX() > (Board.getWidth() - 1)) {
-			position.setX(Board.getWidth() - 1);
-		}
-		
-		this.setPosition(position);
-		this.draw(GameController.getMainPanel());
-		
-		
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
 	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_UP:
+
+			GameController.getInstance().collide(this, Direction.NORTH);
+			// getPosition().setY(getPosition().getY() - 1);
+
+			break;
+		case KeyEvent.VK_DOWN:
+
+			GameController.getInstance().collide(this, Direction.SOUTH);
+			// getPosition().setY(getPosition().getY() + 1);
+
+			break;
+		case KeyEvent.VK_LEFT:
+			GameController.getInstance().collide(this, Direction.WEST);
+			// getPosition().setX(getPosition().getX() - 1);
+
+			break;
+		case KeyEvent.VK_RIGHT:
+			GameController.getInstance().collide(this, Direction.EAST);
+			// getPosition().setX(getPosition().getX() + 1);
+
+			break;
+		default:
+			break;
+		}
+
+		this.draw(GameController.getInstance().getMainPanel());
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
 	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

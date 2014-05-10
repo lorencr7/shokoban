@@ -8,10 +8,10 @@ package sd.emse.shokoban;
  *
  */
 public class Direction {
-	public static int NORTH = -1;
-	public static int SOUTH = 1;
-	public static int EAST = 1;
-	public static int WEST = -1;
+	public static String NORTH = "North";
+	public static String SOUTH = "South";
+	public static String EAST = "East";
+	public static String WEST = "West";
 	
 	
 }

@@ -1,5 +1,7 @@
 package sd.emse.shokoban;
 
+import model.GameController;
+
 
 public class Collision {
 
@@ -19,5 +21,8 @@ public class Collision {
 
 		return false;
 	}
+	
+	
+
 
 }
