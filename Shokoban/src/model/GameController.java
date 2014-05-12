@@ -126,11 +126,11 @@ public class GameController {
 	}
 
 	private void createBoardShapes(String[] boardMap) {
-		for (int i = 0; i < boardMap.length; i++) {
-			String line = boardMap[i];
-			for (int j = 0; j < line.length(); j++) {
-				Position position = new Position(j,i);
-				char character = line.charAt(j);
+		for (int y = 0; y < boardMap.length; y++) {
+			String line = boardMap[y];
+			for (int x = 0; x < line.length(); x++) {
+				Position position = new Position(x,y);
+				char character = line.charAt(x);
 				Shape shape = null;
 				switch (character) {
 				case WALL:
