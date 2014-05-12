@@ -1,6 +1,3 @@
-/**
- * 
- */
 package model;
 
 import java.util.ArrayList;
@@ -13,6 +10,7 @@ import sd.emse.shokoban.Collision;
 import sd.emse.shokoban.Player;
 import sd.emse.shokoban.Position;
 import sd.emse.shokoban.Shape;
+import sd.emse.shokoban.Square;
 import sd.emse.shokoban.Storage;
 import sd.emse.shokoban.Wall;
 
@@ -95,9 +93,49 @@ public class GameController {
 		createBoxes();
 		createWalls();
 		createStorages();
+		createSquare();
 		createPlayer();
 		// getMainPanel().addKeyListener(new PlayerAdapter());
 		mainPanel.setVisible(true);
+	}
+
+	/**
+	 * 
+	 */
+	private void createSquare() {
+		ArrayList<Position> positions = new ArrayList<Position>();
+		positions.add(new Position(3, 1));
+		positions.add(new Position(4, 1));
+		positions.add(new Position(5, 1));
+		positions.add(new Position(2, 2));
+		positions.add(new Position(3, 2));
+		positions.add(new Position(4, 2));
+		positions.add(new Position(5, 2));
+		positions.add(new Position(3, 3));
+		positions.add(new Position(4, 3));
+		positions.add(new Position(5, 3));
+		positions.add(new Position(4, 4));
+		positions.add(new Position(5, 4));
+		positions.add(new Position(1, 4));
+		positions.add(new Position(1, 5));
+		positions.add(new Position(3, 5));
+		positions.add(new Position(5, 5));
+		positions.add(new Position(1, 6));
+		positions.add(new Position(2, 6));
+		positions.add(new Position(3, 6));
+		positions.add(new Position(4, 6));
+		positions.add(new Position(5, 6));
+		positions.add(new Position(1, 7));
+		positions.add(new Position(1, 8));
+		positions.add(new Position(1, 11));
+		positions.add(new Position(1, 12));
+		
+		for (Position position : positions) {
+			Square square = new Square(position);
+			square.draw(mainPanel);
+			board.getShapes().add(square);
+		}
+
 	}
 
 	public void createPanel() {
@@ -204,7 +242,6 @@ public class GameController {
 			Player player = new Player(position);
 			player.draw(mainPanel);
 			board.getShapes().add(player);
-			// player = player;
 		}
 	}
 
@@ -266,14 +303,9 @@ public class GameController {
 			// simple move
 			shape1.move(direction);
 		}
-	}
+		
+		this.draw(GameController.getInstance().getMainPanel());
 
-	public boolean canMove(Shape shape) {
-		if (shape.isMovable()) {
-			return false;
-		} else {
-			return true;
-		}
 	}
 
 	/**

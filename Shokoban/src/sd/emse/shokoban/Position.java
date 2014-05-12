@@ -74,7 +74,7 @@ public class Position {
 	public boolean equals(Object obj) {
 		if (obj instanceof Position) {
 			Position other = (Position) obj;
-			return (other.x== x && other.y == x);
+			return (other.x== x && other.y == y);
 		}
 		return super.equals(obj);
 	}

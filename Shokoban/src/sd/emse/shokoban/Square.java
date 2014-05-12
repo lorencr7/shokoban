@@ -1,10 +1,19 @@
 package sd.emse.shokoban;
 
-import javax.swing.JFrame;
 
 public class Square extends Shape {
 	private Collision collision;
 	
+	/**
+	 * @param position
+	 */
+	public Square(Position position) {
+		super(position);
+		this.setImageName("sokoban/square.jpg");
+	}
+
+	
+
 	public void move(Position pos){
 		this.setPosition(pos);
 	}
