@@ -32,4 +32,12 @@ public class Board extends Shape {
 		}
 		return null;
 	}
+
+	/* (non-Javadoc)
+	 * @see sd.emse.shokoban.Shape#isMovable()
+	 */
+	@Override
+	public boolean isMovable() {
+		return false;
+	}
 }

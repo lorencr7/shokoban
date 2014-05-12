@@ -1,5 +1,6 @@
 package sd.emse.shokoban;
 
+
 import model.GameController;
 
 public class Position {
@@ -26,6 +27,14 @@ public class Position {
 		super();
 		this.x = x;
 		this.y = y;
+	}
+
+	/**
+	 * @param pos
+	 */
+	public Position(Position pos) {
+		this.x=pos.x;
+		this.y=pos.y;
 	}
 
 	public int getLengthX() {
@@ -58,4 +67,23 @@ public class Position {
 		return posAux;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Position) {
+			Position other = (Position) obj;
+			return (other.x== x && other.y == x);
+		}
+		return super.equals(obj);
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "(" +x + "," + y  +")";
+	}
 }

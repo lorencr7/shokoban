@@ -1,8 +1,5 @@
 package sd.emse.shokoban;
 
-import model.GameController;
-
-
 public class Collision {
 
 	public boolean collide(Shape shape1, Shape shape2) {
@@ -21,8 +18,5 @@ public class Collision {
 
 		return false;
 	}
-	
-	
-
 
 }

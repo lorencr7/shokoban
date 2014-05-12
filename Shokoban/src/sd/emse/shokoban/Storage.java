@@ -9,7 +9,12 @@ public class Storage extends Shape{
 		this.setImageName("sokoban/storage.jpg");
 	}
 	
-	public void draw(JFrame container){
-		super.draw(container);
+
+	/* (non-Javadoc)
+	 * @see sd.emse.shokoban.Shape#isMovable()
+	 */
+	@Override
+	public boolean isMovable() {
+		return false;
 	}
 }

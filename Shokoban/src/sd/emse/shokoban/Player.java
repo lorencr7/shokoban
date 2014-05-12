@@ -26,28 +26,6 @@ public class Player extends Shape implements KeyListener {
 
 	}
 
-	public void move(String direction) {
-
-		switch (direction) {
-		case "North":
-			this.getPosition().setY(this.getPosition().getY() - 1);
-			break;
-		case "South":
-			this.getPosition().setY(this.getPosition().getY() + 1);
-			break;
-
-		case "East":
-			this.getPosition().setX(this.getPosition().getX() + 1);
-			break;
-		case "West":
-			this.getPosition().setX(this.getPosition().getX() - 1);
-			break;
-
-		default:
-			break;
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -66,27 +44,28 @@ public class Player extends Shape implements KeyListener {
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		System.out.println(this.getPosition().toString());
+		
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
 
-			GameController.getInstance().collide(this, Direction.NORTH);
+			GameController.getInstance().play(this, Direction.NORTH);
 			// getPosition().setY(getPosition().getY() - 1);
 
 			break;
 		case KeyEvent.VK_DOWN:
 
-			GameController.getInstance().collide(this, Direction.SOUTH);
+			GameController.getInstance().play(this, Direction.SOUTH);
 			// getPosition().setY(getPosition().getY() + 1);
 
 			break;
 		case KeyEvent.VK_LEFT:
-			GameController.getInstance().collide(this, Direction.WEST);
+			GameController.getInstance().play(this, Direction.WEST);
 			// getPosition().setX(getPosition().getX() - 1);
 
 			break;
 		case KeyEvent.VK_RIGHT:
-			GameController.getInstance().collide(this, Direction.EAST);
+			GameController.getInstance().play(this, Direction.EAST);
 			// getPosition().setX(getPosition().getX() + 1);
 
 			break;
@@ -107,5 +86,13 @@ public class Player extends Shape implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/* (non-Javadoc)
+	 * @see sd.emse.shokoban.Shape#isMovable()
+	 */
+	@Override
+	public boolean isMovable() {
+		return true;
 	}
 }

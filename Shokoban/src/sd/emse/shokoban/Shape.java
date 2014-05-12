@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public class Shape {
+public abstract class Shape {
 	private Position position;
 	private String imageName;
 	private JLabel image;
@@ -40,7 +40,6 @@ public class Shape {
 			this.image = new JLabel(imageIcon);
 			container.getContentPane().add(this.image);
 		}
-		System.out.println("drawing " + this.imageName);
 		this.image.setBounds(this.position.getLengthX(),
 				this.position.getLengthY(), 80, 80);
 		container.repaint();
@@ -67,4 +66,9 @@ public class Shape {
 			break;
 		}
 	}
+
+	/**
+	 * @return
+	 */
+	public abstract boolean isMovable();
 }

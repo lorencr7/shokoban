@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 import sd.emse.shokoban.Board;
 import sd.emse.shokoban.Box;
 import sd.emse.shokoban.Collision;
-import sd.emse.shokoban.Direction;
 import sd.emse.shokoban.Player;
 import sd.emse.shokoban.Position;
 import sd.emse.shokoban.Shape;
@@ -27,7 +26,8 @@ public class GameController {
 	private int width;
 	private int height;
 	private static GameController gameController = null;
-	//private PlayerAdapter playerListener;
+
+	// private PlayerAdapter playerListener;
 
 	public static GameController getInstance() {
 		if (gameController == null) {
@@ -96,7 +96,7 @@ public class GameController {
 		createWalls();
 		createStorages();
 		createPlayer();
-//		getMainPanel().addKeyListener(new PlayerAdapter());
+		// getMainPanel().addKeyListener(new PlayerAdapter());
 		mainPanel.setVisible(true);
 	}
 
@@ -243,26 +243,37 @@ public class GameController {
 
 	}
 
-	public void collide(Shape shape1, String direction) {
+	public void play(Shape shape1, String direction) {
 		Position next = shape1.getPosition();
-
 		Shape shape2 = getNextShape(next, direction);
-
-		if (collision.collide(shape1, shape2)) {
-			// Push
-			next = shape2.getPosition();
-			Shape shape3 = getNextShape(next, direction);
+		if (shape2 == null ) {
+			return;
+		}
+		if (shape2.isMovable()) {
+			Shape shape3 = getNextShape(shape2.getPosition(), direction);
+			if (shape3 == null ) {
+				return;
+			}
 			if (collision.collide(shape2, shape3)) {
 				return;
 			} else {
+				// Push
 				// move shape 1 and shape 2
 				shape2.move(direction);
 				shape1.move(direction);
-				return;
 			}
+		} else if (!collision.collide(shape1, shape2)) {
+			// simple move
+			shape1.move(direction);
 		}
-		// simple move
-		shape1.move(direction);
+	}
+
+	public boolean canMove(Shape shape) {
+		if (shape.isMovable()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -271,93 +282,91 @@ public class GameController {
 	 * @return
 	 */
 	public Shape getNextShape(Position pos, String direction) {
-
-		
+		Position nextPos = new Position(pos);
 		switch (direction) {
 		case "North":
-			pos.setY(pos.getY() - 1);
+			nextPos.setY(nextPos.getY() - 1);
 			break;
 		case "South":
-			pos.setY(pos.getY() + 1);
+			nextPos.setY(nextPos.getY() + 1);
 			break;
 
 		case "East":
-			pos.setX(pos.getX() + 1);
+			nextPos.setX(nextPos.getX() + 1);
 			break;
 		case "West":
-			pos.setX(pos.getX() - 1);
+			nextPos.setX(nextPos.getX() - 1);
 			break;
 
 		default:
 			break;
 		}
-		
-		
+
 		for (Shape s : board.getShapes()) {
-			if (s.getPosition().equals(pos)) {
+			if (s.getPosition().equals(nextPos)) {
 				return s;
 			}
 		}
 		return null;
 	}
 
-//	class PlayerAdapter extends KeyAdapter {
-//
-//		/**
-//		 * 
-//		 */
-//		public PlayerAdapter() {
-//
-//		}
-//
-//		public void keyPressed(KeyEvent e) {
-//			Shape player = (Shape) getBoard().getShapes().get(
-//					getBoard().getShapes().size() - 1);
-//
-//			if (player.pos.getY() <= 0) {
-//				player.pos.setY(0);
-//			} else if (player.pos.getY() > (getHeight() - 1)) {
-//				player.pos.setY(getHeight() - 1);
-//			}
-//
-//			if (player.pos.getX() <= 0) {
-//				player.pos.setX(0);
-//			} else if (player.pos.getX() > (getWidth() - 1)) {
-//				player.pos.setX(getWidth() - 1);
-//			}
-//
-//			switch (e.getKeyCode()) {
-//
-//			case KeyEvent.VK_UP:
-//
-//				collide(player, Direction.NORTH);
-//
-//				// pos.setY(pos.getY() - 1);
-//
-//				break;
-//			case KeyEvent.VK_DOWN:
-//
-//				collide(player, Direction.SOUTH);
-//				// pos.setY(pos.getY() + 1);
-//				break;
-//			case KeyEvent.VK_LEFT:
-//				collide(player, Direction.WEST);
-//				// pos.setX(pos.getX() - 1);
-//				break;
-//			case KeyEvent.VK_RIGHT:
-//				collide(player, Direction.EAST);
-//				// pos.setX(pos.getX() + 1);
-//				break;
-//			default:
-//				break;
-//			}
-//
-//			board.getShapes().get(
-//					getBoard().getShapes().size() - 1).setPosition(player.getPosition());
-//			board.getShapes().get(
-//					getBoard().getShapes().size() - 1).draw(getMainPanel());
-//			
-//		}
-//	}
+	// class PlayerAdapter extends KeyAdapter {
+	//
+	// /**
+	// *
+	// */
+	// public PlayerAdapter() {
+	//
+	// }
+	//
+	// public void keyPressed(KeyEvent e) {
+	// Shape player = (Shape) getBoard().getShapes().get(
+	// getBoard().getShapes().size() - 1);
+	//
+	// if (player.pos.getY() <= 0) {
+	// player.pos.setY(0);
+	// } else if (player.pos.getY() > (getHeight() - 1)) {
+	// player.pos.setY(getHeight() - 1);
+	// }
+	//
+	// if (player.pos.getX() <= 0) {
+	// player.pos.setX(0);
+	// } else if (player.pos.getX() > (getWidth() - 1)) {
+	// player.pos.setX(getWidth() - 1);
+	// }
+	//
+	// switch (e.getKeyCode()) {
+	//
+	// case KeyEvent.VK_UP:
+	//
+	// collide(player, Direction.NORTH);
+	//
+	// // pos.setY(pos.getY() - 1);
+	//
+	// break;
+	// case KeyEvent.VK_DOWN:
+	//
+	// collide(player, Direction.SOUTH);
+	// // pos.setY(pos.getY() + 1);
+	// break;
+	// case KeyEvent.VK_LEFT:
+	// collide(player, Direction.WEST);
+	// // pos.setX(pos.getX() - 1);
+	// break;
+	// case KeyEvent.VK_RIGHT:
+	// collide(player, Direction.EAST);
+	// // pos.setX(pos.getX() + 1);
+	// break;
+	// default:
+	// break;
+	// }
+	//
+	// board.getShapes().get(
+	// getBoard().getShapes().size() - 1).setPosition(player.getPosition());
+	// board.getShapes().get(
+	// getBoard().getShapes().size() - 1).draw(getMainPanel());
+	//
+	// }
+	// }
 
 }
