@@ -103,19 +103,19 @@ public class GameController {
 	public final char WALL = 'W';
 	public final char PLAYER = 'P';
 	public final char STORAGE = 'S';
-	public final char EMPTYSQUARE = 'E';
+	public final char EMPTYSQUARE = ' ';
 	public final char BOX = 'B';
 	public final char BOXINSTORAGE = 'X';
 	public void createInitialBoard() {
 		String [] boardMap = {
-				"EEWWWWWE",//1
-				"WWWEEEWE",//2
-				"WSPBEEWE",//3
-				"WWWEBSWE",//4
-				"WSWWBEWE",//5
-				"WEWESEWW",//6
-				"WBEXBBSW",//7
-				"WEEESEEW",//8
+				"  WWWWW ",//1
+				"WWW   W ",//2
+				"WSPB  W ",//3
+				"WWW BSW ",//4
+				"WSWWB W ",//5
+				"W W S WW",//6
+				"WB XBBSW",//7
+				"W   S  W",//8
 				"WWWWWWWW"//9
 		};
 		this.createPanel();
