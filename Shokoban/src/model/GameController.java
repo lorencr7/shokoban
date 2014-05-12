@@ -87,57 +87,6 @@ public class GameController {
 	public void setBoard(Board board) {
 		this.board = board;
 	}
-
-	public void createInitialBoard() {
-		createPanel();
-		createBoxes();
-		createWalls();
-		createStorages();
-		createSquare();
-		createPlayer();
-		// getMainPanel().addKeyListener(new PlayerAdapter());
-		mainPanel.setVisible(true);
-	}
-
-	/**
-	 * 
-	 */
-	private void createSquare() {
-		ArrayList<Position> positions = new ArrayList<Position>();
-		positions.add(new Position(3, 1));
-		positions.add(new Position(4, 1));
-		positions.add(new Position(5, 1));
-		positions.add(new Position(2, 2));
-		positions.add(new Position(3, 2));
-		positions.add(new Position(4, 2));
-		positions.add(new Position(5, 2));
-		positions.add(new Position(3, 3));
-		positions.add(new Position(4, 3));
-		positions.add(new Position(5, 3));
-		positions.add(new Position(4, 4));
-		positions.add(new Position(5, 4));
-		positions.add(new Position(1, 4));
-		positions.add(new Position(1, 5));
-		positions.add(new Position(3, 5));
-		positions.add(new Position(5, 5));
-		positions.add(new Position(1, 6));
-		positions.add(new Position(2, 6));
-		positions.add(new Position(3, 6));
-		positions.add(new Position(4, 6));
-		positions.add(new Position(5, 6));
-		positions.add(new Position(1, 7));
-		positions.add(new Position(1, 8));
-		positions.add(new Position(1, 11));
-		positions.add(new Position(1, 12));
-		
-		for (Position position : positions) {
-			Square square = new Square(position);
-			square.draw(mainPanel);
-			board.getShapes().add(square);
-		}
-
-	}
-
 	public void createPanel() {
 		mainPanel = new JFrame("Sokoban");
 		mainPanel.setBounds(0, 0, getWidth() * unitSize, getHeight() * unitSize
@@ -150,98 +99,68 @@ public class GameController {
 		// SokobanModel.mainPanel.addKeyListener(new BoardAdapter());
 
 	}
+	
+	public final char WALL = 'W';
+	public final char PLAYER = 'P';
+	public final char STORAGE = 'S';
+	public final char EMPTYSQUARE = 'E';
+	public final char BOX = 'B';
+	public final char BOXINSTORAGE = 'X';
+	public void createInitialBoard() {
+		String [] boardMap = {
+				"EEWWWWWE",//1
+				"WWWEEEWE",//2
+				"WSPBEEWE",//3
+				"WWWEBSWE",//4
+				"WSWWBEWE",//5
+				"WEWESEWW",//6
+				"WBEXBBSW",//7
+				"WEEESEEW",//8
+				"WWWWWWWW"//9
+		};
+		this.createPanel();
+		this.createBoardShapes(boardMap);
 
-	public void createWalls() {
-		ArrayList<Position> positions = new ArrayList<Position>();
-		positions.add(new Position(2, 0));
-		positions.add(new Position(3, 0));
-		positions.add(new Position(4, 0));
-		positions.add(new Position(5, 0));
-		positions.add(new Position(6, 0));
-
-		positions.add(new Position(0, 1));
-		positions.add(new Position(1, 1));
-		positions.add(new Position(2, 1));
-		positions.add(new Position(6, 1));
-
-		positions.add(new Position(0, 2));
-		positions.add(new Position(6, 2));
-		positions.add(new Position(0, 3));
-		positions.add(new Position(1, 3));
-		positions.add(new Position(2, 3));
-		positions.add(new Position(6, 3));
-
-		positions.add(new Position(0, 4));
-		positions.add(new Position(2, 4));
-		positions.add(new Position(3, 4));
-		positions.add(new Position(6, 4));
-
-		positions.add(new Position(0, 5));
-		positions.add(new Position(2, 5));
-		positions.add(new Position(6, 5));
-		positions.add(new Position(7, 5));
-
-		positions.add(new Position(0, 6));
-		positions.add(new Position(7, 6));
-
-		positions.add(new Position(0, 7));
-		positions.add(new Position(7, 7));
-
-		positions.add(new Position(0, 8));
-		positions.add(new Position(1, 8));
-		positions.add(new Position(2, 8));
-		positions.add(new Position(3, 8));
-		positions.add(new Position(4, 8));
-		positions.add(new Position(5, 8));
-		positions.add(new Position(6, 8));
-		positions.add(new Position(7, 8));
-
-		for (Position position : positions) {
-			Wall wall = new Wall(position);
-			wall.draw(mainPanel);
-			board.getShapes().add(wall);
-		}
+		// getMainPanel().addKeyListener(new PlayerAdapter());
+		mainPanel.setVisible(true);
 	}
 
-	public void createStorages() {
-		ArrayList<Position> positions = new ArrayList<Position>();
-		positions.add(new Position(1, 2));
-		positions.add(new Position(6, 4));
-		positions.add(new Position(1, 4));
-		positions.add(new Position(4, 5));
-		positions.add(new Position(3, 6));
-		positions.add(new Position(6, 6));
-		positions.add(new Position(4, 7));
-		for (Position position : positions) {
-			Storage storage = new Storage(position);
-			storage.draw(mainPanel);
-			board.getShapes().add(storage);
-		}
-	}
+	private void createBoardShapes(String[] boardMap) {
+		for (int i = 0; i < boardMap.length; i++) {
+			String line = boardMap[i];
+			for (int j = 0; j < line.length(); j++) {
+				Position position = new Position(j,i);
+				char character = line.charAt(j);
+				Shape shape = null;
+				switch (character) {
+				case WALL:
+					shape = new Wall(position);
+					break;
+				case PLAYER:
+					shape = new Player(position);
+					break;
+				case STORAGE:
+					shape = new Storage(position);
+					break;
+				case EMPTYSQUARE:
+					shape = new Square(position);
+					break;
+				case BOX:
+					shape = new Box(position);
+					break;
+				case BOXINSTORAGE:
+					shape = new Storage(position);//TODO CREATE SPECIAL SHAPE OR SOMETHING THAT CHANGES THE BOX COLOR
+					Shape storage = new Box(position);
+					board.getShapes().add(storage);
+					storage.draw(this.mainPanel);
+					break;
 
-	public void createBoxes() {
-		ArrayList<Position> positions = new ArrayList<Position>();
-		positions.add(new Position(3, 2));
-		positions.add(new Position(4, 3));
-		positions.add(new Position(4, 4));
-		positions.add(new Position(1, 6));
-		positions.add(new Position(3, 6));
-		positions.add(new Position(4, 6));
-		positions.add(new Position(5, 6));
-		for (Position position : positions) {
-			Box box = new Box(position);
-			box.draw(mainPanel);
-			board.getShapes().add(box);
-		}
-	}
-
-	public void createPlayer() {
-		ArrayList<Position> positions = new ArrayList<Position>();
-		positions.add(new Position(2, 2));
-		for (Position position : positions) {
-			Player player = new Player(position);
-			player.draw(mainPanel);
-			board.getShapes().add(player);
+				default:
+					break;
+				}
+				shape.draw(this.mainPanel);
+				board.getShapes().add(shape);
+			}
 		}
 	}
 
