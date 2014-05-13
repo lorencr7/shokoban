@@ -15,6 +15,5 @@ public class Java2DExample extends JFrame {
 		GameController game = GameController.getInstance();
 
 
-		game.draw(null);
 	}
 }
