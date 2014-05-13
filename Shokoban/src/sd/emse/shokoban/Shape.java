@@ -1,13 +1,15 @@
 package sd.emse.shokoban;
 
+import java.util.Observable;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public abstract class Shape {
+public abstract class Shape extends Observable{
 	private Position position;
 	private String imageName;
-	private JLabel image;
+	 JLabel image;
 
 	public Position getPosition() {
 		return position;
@@ -42,30 +44,28 @@ public abstract class Shape {
 		}
 		this.image.setBounds(this.position.getLengthX(),
 				this.position.getLengthY(), 80, 80);
-		container.repaint();
 	}
 
-	public void move(String direction) {
+	public void move(Direction direction) {
 
 		switch (direction) {
-		case "North":
+		case NORTH:
 			this.position.setY(this.position.getY() - 1);
 			break;
-		case "South":
+		case SOUTH:
 			this.position.setY(this.position.getY() + 1);
 			break;
 
-		case "East":
+		case EAST:
 			this.position.setX(this.position.getX() + 1);
 			break;
-		case "West":
+		case WEST:
 			this.position.setX(this.position.getX() - 1);
 			break;
 
 		default:
 			break;
 		}
-		
 	}
 
 	/**

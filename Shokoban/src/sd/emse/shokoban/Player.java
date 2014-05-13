@@ -12,9 +12,6 @@ public class Player extends Shape implements KeyListener {
 		super(position);
 		this.setImageName("sokoban/player.png");
 		collision = new Collision();
-
-		GameController.getInstance().getMainPanel().addKeyListener(this);
-
 	}
 
 	public boolean collide(Shape shape) {
@@ -45,35 +42,26 @@ public class Player extends Shape implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		System.out.println(this.getPosition().toString());
+		setChanged();
 		
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
-
-			GameController.getInstance().play(this, Direction.NORTH);
-			// getPosition().setY(getPosition().getY() - 1);
-
+			//(this, Direction.NORTH);
+			notifyObservers(Direction.NORTH);
 			break;
 		case KeyEvent.VK_DOWN:
-
-			GameController.getInstance().play(this, Direction.SOUTH);
-			// getPosition().setY(getPosition().getY() + 1);
-
+			notifyObservers(Direction.SOUTH);
 			break;
 		case KeyEvent.VK_LEFT:
-			GameController.getInstance().play(this, Direction.WEST);
-			// getPosition().setX(getPosition().getX() - 1);
-
+			notifyObservers(Direction.WEST);
 			break;
 		case KeyEvent.VK_RIGHT:
-			GameController.getInstance().play(this, Direction.EAST);
-			// getPosition().setX(getPosition().getX() + 1);
-
+			notifyObservers(Direction.EAST);
 			break;
 		default:
 			break;
 		}
 
-		this.draw(GameController.getInstance().getMainPanel());
 
 	}
 
@@ -95,4 +83,6 @@ public class Player extends Shape implements KeyListener {
 	public boolean isMovable() {
 		return true;
 	}
+	
+	
 }

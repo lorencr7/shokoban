@@ -1,12 +1,15 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JFrame;
 
 import sd.emse.shokoban.Board;
 import sd.emse.shokoban.Box;
 import sd.emse.shokoban.Collision;
+import sd.emse.shokoban.Direction;
 import sd.emse.shokoban.Player;
 import sd.emse.shokoban.Position;
 import sd.emse.shokoban.Shape;
@@ -14,7 +17,7 @@ import sd.emse.shokoban.Square;
 import sd.emse.shokoban.Storage;
 import sd.emse.shokoban.Wall;
 
-public class GameController {
+public class GameController implements Observer {
 
 	// shapes contained in model
 	private Board board;
@@ -96,26 +99,24 @@ public class GameController {
 		mainPanel.setLayout(null);
 		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel.setResizable(false);
-		// SokobanModel.mainPanel.addKeyListener(new BoardAdapter());
-
 	}
 	
 	public final char WALL = 'W';
 	public final char PLAYER = 'P';
 	public final char STORAGE = 'S';
-	public final char EMPTYSQUARE = 'E';
+	public final char EMPTYSQUARE = ' ';
 	public final char BOX = 'B';
 	public final char BOXINSTORAGE = 'X';
 	public void createInitialBoard() {
 		String [] boardMap = {
-				"EEWWWWWE",//1
-				"WWWEEEWE",//2
-				"WSPBEEWE",//3
-				"WWWEBSWE",//4
-				"WSWWBEWE",//5
-				"WEWESEWW",//6
-				"WBEXBBSW",//7
-				"WEEESEEW",//8
+				"  WWWWW ",//1
+				"WWW   W ",//2
+				"WSPB  W ",//3
+				"WWW BSW ",//4
+				"WSWWB W ",//5
+				"W W S WW",//6
+				"WB XBBSW",//7
+				"W   S  W",//8
 				"WWWWWWWW"//9
 		};
 		this.createPanel();
@@ -135,21 +136,41 @@ public class GameController {
 				switch (character) {
 				case WALL:
 					shape = new Wall(position);
+					board.getShapes().add(shape);
 					break;
 				case PLAYER:
 					shape = new Player(position);
+					this.mainPanel.addKeyListener((Player)shape);
+					shape.addObserver(this);
+					board.getShapes().add(shape);
+					
+					{
+					Shape square = new Square(position);
+					square.draw(this.mainPanel);
+					board.getShapes().add(square);
+					}
 					break;
 				case STORAGE:
 					shape = new Storage(position);
+					board.getShapes().add(shape);
 					break;
 				case EMPTYSQUARE:
 					shape = new Square(position);
+					board.getShapes().add(shape);
 					break;
 				case BOX:
 					shape = new Box(position);
+					board.getShapes().add(shape);
+					{
+					Shape square = new Square(position);
+					square.draw(this.mainPanel);
+					board.getShapes().add(square);
+					}		
 					break;
 				case BOXINSTORAGE:
 					shape = new Storage(position);//TODO CREATE SPECIAL SHAPE OR SOMETHING THAT CHANGES THE BOX COLOR
+					board.getShapes().add(shape);
+					
 					Shape storage = new Box(position);
 					board.getShapes().add(storage);
 					storage.draw(this.mainPanel);
@@ -159,7 +180,7 @@ public class GameController {
 					break;
 				}
 				shape.draw(this.mainPanel);
-				board.getShapes().add(shape);
+				
 			}
 		}
 	}
@@ -175,7 +196,7 @@ public class GameController {
 		return mainPanel;
 	}
 
-	public boolean move(Shape player, String dir) {
+	public boolean move(Shape player, Direction dir) {
 		Position next = player.getPosition();
 
 		Shape shape2 = getNextShape(next, dir);
@@ -199,7 +220,7 @@ public class GameController {
 
 	}
 
-	public void play(Shape shape1, String direction) {
+	public void play(Shape shape1, Direction direction) {
 		Position next = shape1.getPosition();
 		Shape shape2 = getNextShape(next, direction);
 		if (shape2 == null ) {
@@ -223,7 +244,7 @@ public class GameController {
 			shape1.move(direction);
 		}
 		
-		this.draw(GameController.getInstance().getMainPanel());
+		//FIXME this.draw(GameController.getInstance().getMainPanel());
 
 	}
 
@@ -232,20 +253,20 @@ public class GameController {
 	 * @param direction
 	 * @return
 	 */
-	public Shape getNextShape(Position pos, String direction) {
+	public Shape getNextShape(Position pos, Direction direction) {
 		Position nextPos = new Position(pos);
 		switch (direction) {
-		case "North":
+		case NORTH:
 			nextPos.setY(nextPos.getY() - 1);
 			break;
-		case "South":
+		case SOUTH:
 			nextPos.setY(nextPos.getY() + 1);
 			break;
 
-		case "East":
+		case EAST:
 			nextPos.setX(nextPos.getX() + 1);
 			break;
-		case "West":
+		case WEST:
 			nextPos.setX(nextPos.getX() - 1);
 			break;
 
@@ -259,6 +280,19 @@ public class GameController {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		System.out.println("player moved");
+		Direction direction = (Direction) arg;
+		if (o instanceof Player) {
+			Player player = (Player) o;
+			move(player, direction);
+			player.draw(mainPanel);
+			mainPanel.repaint();
+			//TODO TEST
+		}
 	}
 
 	// class PlayerAdapter extends KeyAdapter {
