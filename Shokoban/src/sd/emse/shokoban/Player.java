@@ -11,6 +11,7 @@ public class Player extends Shape implements KeyListener {
 	public Player(Position position) {
 		super(position);
 		this.setImageName("sokoban/player.png");
+		this.setIndex(1);
 		collision = new Collision();
 	}
 

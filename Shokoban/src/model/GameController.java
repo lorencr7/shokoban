@@ -140,40 +140,21 @@ public class GameController implements Observer {
 				switch (character) {
 				case WALL:
 					shape = new Wall(position);
-					board.getShapes().add(shape);
 					break;
 				case PLAYER:
 					shape = new Player(position);
 					this.mainPanel.addKeyListener((Player)shape);
 					shape.addObserver(this);
-					board.getShapes().add(shape);
-					{
-					Shape square = new Square(position);
-					square.draw(this.mainPanel);
-					board.getShapes().add(square);
-					}
 					break;
 				case STORAGE:
 					shape = new Storage(position);
-					board.getShapes().add(shape);
-					break;
-				case EMPTYSQUARE:
-					shape = new Square(position);
-					board.getShapes().add(shape);
 					break;
 				case BOX:
 					shape = new Box(position);
 					board.getShapes().add(shape);
-					{
-					Shape square = new Square(position);
-					square.draw(this.mainPanel);
-					board.getShapes().add(square);
-					}		
 					break;
 				case BOXINSTORAGE:
 					shape = new Storage(position);//TODO CREATE SPECIAL SHAPE OR SOMETHING THAT CHANGES THE BOX COLOR
-					board.getShapes().add(shape);
-					
 					Shape storage = new Box(position);
 					board.getShapes().add(storage);
 					storage.draw(this.mainPanel);
@@ -182,7 +163,14 @@ public class GameController implements Observer {
 				default:
 					break;
 				}
-				shape.draw(this.mainPanel);
+				if (character != ' ') {
+					board.getShapes().add(shape);
+					shape.draw(this.mainPanel);
+				}
+				
+				Shape square = new Square(position);
+				square.draw(this.mainPanel);
+				board.getShapes().add(square);
 				
 			}
 		}

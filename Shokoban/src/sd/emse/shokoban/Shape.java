@@ -9,7 +9,8 @@ import javax.swing.JLabel;
 public abstract class Shape extends Observable{
 	private Position position;
 	private String imageName;
-	 JLabel image;
+	JLabel image;
+	private int index;
 
 	public Position getPosition() {
 		return position;
@@ -26,6 +27,14 @@ public abstract class Shape extends Observable{
 	public void setImageName(String imageName) {
 		this.imageName = imageName;
 	}
+	
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
 
 	public Shape() {
 		super();
@@ -40,10 +49,9 @@ public abstract class Shape extends Observable{
 		if (this.image == null) {
 			ImageIcon imageIcon = new ImageIcon(this.imageName);
 			this.image = new JLabel(imageIcon);
-			container.getContentPane().add(this.image);
+			container.getLayeredPane().add(this.image, this.index);
 		}
-		this.image.setBounds(this.position.getLengthX(),
-				this.position.getLengthY(), 80, 80);
+		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
 	}
 
 	public void move(Direction direction) {
