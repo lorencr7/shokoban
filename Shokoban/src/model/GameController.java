@@ -1,5 +1,7 @@
 package model;
 
+import java.awt.Color;
+import java.awt.Insets;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -89,17 +91,22 @@ public class GameController implements Observer {
 	public void setBoard(Board board) {
 		this.board = board;
 	}
+	
 	public void createPanel() {
 		mainPanel = new JFrame("Sokoban");
-		mainPanel.setBounds(0, 0, getWidth() * unitSize, getHeight() * unitSize
-				+ 20);
-		// mainPanel.setBackground(new Color(83, 83, 83));
-		// mainPanel.pack();
+		mainPanel.setBackground(new Color(83, 83, 83));
 		mainPanel.setLayout(null);
 		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel.setResizable(false);
-	}
-	
+		mainPanel.setBackground(Color.blue);
+		//Size and display the window.
+	    Insets insets = mainPanel.getInsets();
+		mainPanel.setBounds(0, 0, 
+				getWidth() * unitSize+insets.left + insets.right, 
+				getHeight() * unitSize + insets.top + insets.bottom);
+	  }
+		
+		
 	public final char WALL = 'W';
 	public final char PLAYER = 'P';
 	public final char STORAGE = 'S';
@@ -120,8 +127,6 @@ public class GameController implements Observer {
 		};
 		this.createPanel();
 		this.createBoardShapes(boardMap);
-
-		// getMainPanel().addKeyListener(new PlayerAdapter());
 		mainPanel.setVisible(true);
 	}
 
@@ -142,7 +147,6 @@ public class GameController implements Observer {
 					this.mainPanel.addKeyListener((Player)shape);
 					shape.addObserver(this);
 					board.getShapes().add(shape);
-					
 					{
 					Shape square = new Square(position);
 					square.draw(this.mainPanel);
@@ -184,7 +188,7 @@ public class GameController implements Observer {
 		}
 	}
 
-	public void draw(JFrame container) {
+	public void draw() {
 		createInitialBoard();
 	}
 
@@ -292,6 +296,10 @@ public class GameController implements Observer {
 			mainPanel.repaint();
 			//TODO TEST
 		}
+	}
+
+	public void initGame() {
+		draw();
 	}
 
 	// class PlayerAdapter extends KeyAdapter {
