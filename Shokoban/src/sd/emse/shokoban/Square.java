@@ -11,14 +11,13 @@ public class Square extends Shape {
 	public Square(Position position) {
 		super(position);
 		this.setImageName("");
-		this.setzOrder(5);		
+		this.setIndex(5);		
 	}
 
 	@Override
 	public void draw(JFrame container) {
-		// TODO Auto-generated method stub
 		super.draw(container);
-		this.image.setOpaque(false);
+		//TODO this.image.setOpaque(false);
 	}
 
 	public void move(Position pos){

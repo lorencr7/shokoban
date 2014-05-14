@@ -10,7 +10,8 @@ public abstract class Shape extends Observable implements Comparable<Shape> {
 	private Position position;
 	private String imageName;
 	JLabel image;
-	private Integer zOrder = 100;
+	/**The z-index of the shape */
+	private Integer index = 100;
 
 	public Position getPosition() {
 		return position;
@@ -27,6 +28,14 @@ public abstract class Shape extends Observable implements Comparable<Shape> {
 	public void setImageName(String imageName) {
 		this.imageName = imageName;
 	}
+	
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
 
 	public Shape() {
 		super();
@@ -41,10 +50,9 @@ public abstract class Shape extends Observable implements Comparable<Shape> {
 		if (this.image == null) {
 			ImageIcon imageIcon = new ImageIcon(this.imageName);
 			this.image = new JLabel(imageIcon);
-			container.getContentPane().add(this.image);
+			container.getLayeredPane().add(this.image, this.index);
 		}
-		this.image.setBounds(this.position.getLengthX(),
-				this.position.getLengthY(), 80, 80);
+		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
 	}
 
 	public void move(Direction direction) {
@@ -69,21 +77,13 @@ public abstract class Shape extends Observable implements Comparable<Shape> {
 		}
 	}
 
-	/**
-	 * @return
-	 */
 	public abstract boolean isMovable();
 
-	public int getzOrder() {
-		return zOrder;
-	}
-
-	public void setzOrder(int zOrder) {
-		this.zOrder = zOrder;
-	}
-	
+	/**
+	 * This allow sort by z-index
+	 */
 	@Override
 	public int compareTo(Shape o) {
-		return zOrder.compareTo(o.zOrder);
+		return index.compareTo(o.index);
 	}
 }

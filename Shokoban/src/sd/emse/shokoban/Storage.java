@@ -7,7 +7,7 @@ public class Storage extends Square{
 	public Storage(Position position) {
 		super(position);
 		this.setImageName("sokoban/storage.jpg");
-		this.setzOrder(4);
+		this.setIndex(4);
 	}
 	
 

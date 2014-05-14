@@ -27,10 +27,14 @@ public class Board extends Shape {
 		}
 		return null;
 	}
+	
+	@Override
+	public void draw(JFrame container) {
+		for (Shape shape : shapes) {
+			shape.draw(container);
+		}
+	}
 
-	/* (non-Javadoc)
-	 * @see sd.emse.shokoban.Shape#isMovable()
-	 */
 	@Override
 	public boolean isMovable() {
 		return false;

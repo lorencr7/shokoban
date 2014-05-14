@@ -86,7 +86,8 @@ public class GameController implements Observer {
 		
 		this.createPanel();
 		this.createBoardShapes(boardMap);
-		this.drawAllShapes();
+		this.board.draw(mainPanel);
+		this.mainPanel.setVisible(true);		
 	}
 
 	public void createPanel() {
@@ -162,13 +163,6 @@ public class GameController implements Observer {
 		Collections.sort(this.board.getShapes());
 	}
 
-	private void drawAllShapes() {
-		for (Shape shape : this.board.getShapes()) {
-			shape.draw(this.mainPanel);
-		}
-
-		this.mainPanel.setVisible(true);
-	}
 
 	/**
 	 * @return the mainPanel
