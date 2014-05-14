@@ -21,7 +21,7 @@ import sd.emse.shokoban.Storage;
 import sd.emse.shokoban.Wall;
 
 public class GameController implements Observer {
-	
+
 	// Constants
 	public static final int SQUARE_SIZE = 80;
 	private static final int BOARD_WIDTH = 8;
@@ -53,25 +53,25 @@ public class GameController implements Observer {
 	public void setHeight(int height) {
 		this.height = height;
 	}
- 
+
 
 	public void initGame() {
 		draw();
 	}
-	
+
 	public void draw() {
 		createInitialBoard();
 	}
-		
+
 	public final char WALL = 'W';
 	public final char PLAYER = 'P';
 	public final char STORAGE = 'S';
 	public final char EMPTYSQUARE = ' ';
 	public final char BOX = 'B';
 	public final char BOXINSTORAGE = 'X';
-	
+
 	public void createInitialBoard() {
-		
+
 		String [] boardMap = {
 				"  WWWWW ",//1
 				"WWW   W ",//2
@@ -83,7 +83,7 @@ public class GameController implements Observer {
 				"W   S  W",//8
 				"WWWWWWWW"//9
 		};
-		
+
 		this.createPanel();
 		this.createBoardShapes(boardMap);
 		this.board.draw(mainPanel);
@@ -96,15 +96,15 @@ public class GameController implements Observer {
 		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel.setLayout(null);
 		//Size and display the window.
-	    Insets insets = mainPanel.getInsets();
+		Insets insets = mainPanel.getInsets();
 		mainPanel.setSize(getWidth() * SQUARE_SIZE+insets.left + insets.right, 
-				getHeight() * SQUARE_SIZE + insets.top + insets.bottom);
-		
+				getHeight() * SQUARE_SIZE + insets.top + insets.bottom + 20);
+
 		mainPanel.setResizable(false);		
 	}
-		
+
 	private void createBoardShapes(String[] boardMap) {
-		
+
 		for (int y = 0; y < boardMap.length; y++) {
 			String line = boardMap[y];
 			for (int x = 0; x < line.length(); x++) {
@@ -112,55 +112,41 @@ public class GameController implements Observer {
 				char character = line.charAt(x);
 				Shape shape = null;
 				switch (character) {
+				case WALL:
+					shape = new Wall(position);
+					break;
 				case PLAYER:
 					shape = new Player(position);
-					board.getShapes().add(shape);
 					this.mainPanel.addKeyListener((Player)shape);
 					shape.addObserver(this);
 					break;
-				case WALL:
-					shape = new Wall(position);
-					board.getShapes().add(shape);
-					break;
-				case BOX:
-					//box
-					shape = new Box(position);
-					board.getShapes().add(shape);
-					break;
-				case BOXINSTORAGE:
-					//box
-					shape = new Box(position);
-					board.getShapes().add(shape);
-					//floor
-					shape = new Storage(position);
-					board.getShapes().add(shape);
-					break;
 				case STORAGE:
 					shape = new Storage(position);
-					board.getShapes().add(shape);
 					break;
-				case EMPTYSQUARE:
-					shape = new Square(position);
-					board.getShapes().add(shape);
+				case BOX:
+					shape = new Box(position);
 					break;
+				case BOXINSTORAGE:
+					shape = new Storage(position);//TODO CREATE SPECIAL SHAPE OR SOMETHING THAT CHANGES THE BOX COLOR		
+					Shape storage = new Box(position);
+					board.getShapes().add(storage);
+					storage.draw(this.mainPanel);
 				default:
 					break;
-				}				
-			}
-		}
+				}
+				if (character != EMPTYSQUARE) {
+					board.getShapes().add(shape);
+					shape.draw(this.mainPanel);
+				}
 
-		//Generate empty squares
-		ArrayList<Shape> emptySquares = new ArrayList<>();
-		for (Shape shape : this.board.getShapes()) {
-			if (!(shape instanceof Square) && !(shape instanceof Wall)) {
-				Square floor = new Square(shape.getPosition());
-				emptySquares.add(floor);
+				Shape square = new Square(position);
+				square.draw(this.mainPanel);
+				board.getShapes().add(square);
+
+				//Sort by zIndex
+				//Collections.sort(this.board.getShapes());
 			}
 		}
-		this.board.getShapes().addAll(emptySquares);
-		
-		//Sort by zIndex
-		Collections.sort(this.board.getShapes());
 	}
 
 
@@ -240,8 +226,8 @@ public class GameController implements Observer {
 			Player player = (Player) o;
 			play(player, direction);
 			//TODO TEST
-//			mainPanel.repaint();
-			
+			//			mainPanel.repaint();
+
 		}
 	}
 

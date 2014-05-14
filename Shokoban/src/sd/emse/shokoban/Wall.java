@@ -8,7 +8,7 @@ public class Wall extends Shape {
 	public Wall(Position position) {
 		super(position);
 		this.setImageName("sokoban/wall.jpg");
-		this.setIndex(3);
+		this.setIndex(1);
 	}
 	/* (non-Javadoc)
 	 * @see sd.emse.shokoban.Shape#isMovable()

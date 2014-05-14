@@ -10,8 +10,8 @@ public class Square extends Shape {
 	 */
 	public Square(Position position) {
 		super(position);
-		this.setImageName("");
-		this.setIndex(5);		
+		this.setImageName("sokoban/square.jpg");
+		this.setIndex(0);		
 	}
 
 	@Override
