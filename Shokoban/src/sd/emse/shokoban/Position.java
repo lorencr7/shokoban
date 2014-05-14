@@ -38,11 +38,11 @@ public class Position {
 	}
 
 	public int getLengthX() {
-		return this.x * GameController.unitSize;
+		return this.x * GameController.SQUARE_SIZE;
 	}
 
 	public int getLengthY() {
-		return this.y * GameController.unitSize;
+		return this.y * GameController.SQUARE_SIZE;
 	}
 
 	public Position obtainNewPosition(Position pos, String direction) {

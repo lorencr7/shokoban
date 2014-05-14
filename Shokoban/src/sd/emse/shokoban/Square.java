@@ -4,22 +4,21 @@ import javax.swing.JFrame;
 
 
 public class Square extends Shape {
-	private Collision collision;
 	
 	/**
 	 * @param position
 	 */
 	public Square(Position position) {
 		super(position);
-		this.setImageName("sokoban/transparent_cell.png");
-		
+		this.setImageName("");
+		this.setzOrder(5);		
 	}
 
 	@Override
 	public void draw(JFrame container) {
 		// TODO Auto-generated method stub
 		super.draw(container);
-//		this.image.setOpaque(false);
+		this.image.setOpaque(false);
 	}
 
 	public void move(Position pos){

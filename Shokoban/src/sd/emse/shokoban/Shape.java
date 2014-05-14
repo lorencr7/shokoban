@@ -6,10 +6,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public abstract class Shape extends Observable{
+public abstract class Shape extends Observable implements Comparable<Shape> {
 	private Position position;
 	private String imageName;
-	 JLabel image;
+	JLabel image;
+	private Integer zOrder = 100;
 
 	public Position getPosition() {
 		return position;
@@ -72,4 +73,17 @@ public abstract class Shape extends Observable{
 	 * @return
 	 */
 	public abstract boolean isMovable();
+
+	public int getzOrder() {
+		return zOrder;
+	}
+
+	public void setzOrder(int zOrder) {
+		this.zOrder = zOrder;
+	}
+	
+	@Override
+	public int compareTo(Shape o) {
+		return zOrder.compareTo(o.zOrder);
+	}
 }

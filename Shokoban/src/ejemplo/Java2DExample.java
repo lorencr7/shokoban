@@ -1,20 +1,12 @@
 package ejemplo;
 
-import javax.swing.JFrame;
-
 import model.GameController;
 
-public class Java2DExample extends JFrame {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	// start program
+public class Java2DExample{
+
 	public static void main(String args[]) {
-		GameController game = GameController.getInstance();
+		GameController game = new GameController();
 		game.initGame();
-		
 		
 	    //Schedule a job for the event-dispatching thread:
 	    //creating and showing this application's GUI.

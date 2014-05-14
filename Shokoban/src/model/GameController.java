@@ -2,6 +2,8 @@ package model;
 
 import java.awt.Color;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -19,30 +21,20 @@ import sd.emse.shokoban.Storage;
 import sd.emse.shokoban.Wall;
 
 public class GameController implements Observer {
+	
+	// Constants
+	public static final int SQUARE_SIZE = 80;
+	private static final int BOARD_WIDTH = 8;
+	private static final int BOARD_HEIGHT = 9;
 
-	// shapes contained in model
 	private Board board;
 	private Collision collision;
 	private JFrame mainPanel;
-	public static final int unitSize = 80;
-	private int width;
-	private int height;
-	private static GameController gameController = null;
+	private int width = BOARD_WIDTH;
+	private int height = BOARD_HEIGHT;
 
-	// private PlayerAdapter playerListener;
-
-	public static GameController getInstance() {
-		if (gameController == null) {
-			gameController = new GameController(8, 9);
-		}
-		return gameController;
-	}
-
-	// no-argument constructor
-	private GameController(int x, int y) {
-		width = x;
-		height = y;
-		board = new Board(x, y);
+	public GameController() {
+		board = new Board(0,0);
 		collision = new Collision();
 	}
 
@@ -61,51 +53,15 @@ public class GameController implements Observer {
 	public void setHeight(int height) {
 		this.height = height;
 	}
+ 
 
-	/**
-	 * @return the collision
-	 */
-	public Collision getCollision() {
-		return collision;
-	}
-
-	/**
-	 * @param collision
-	 *            the collision to set
-	 */
-	public void setCollision(Collision collision) {
-		this.collision = collision;
-	}
-
-	/**
-	 * @return the board
-	 */
-	public Board getBoard() {
-		return board;
-	}
-
-	/**
-	 * @param board
-	 *            the board to set
-	 */
-	public void setBoard(Board board) {
-		this.board = board;
+	public void initGame() {
+		draw();
 	}
 	
-	public void createPanel() {
-		mainPanel = new JFrame("Sokoban");
-		mainPanel.setBackground(new Color(83, 83, 83));
-		mainPanel.setLayout(null);
-		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainPanel.setResizable(false);
-		mainPanel.setBackground(Color.blue);
-		//Size and display the window.
-	    Insets insets = mainPanel.getInsets();
-		mainPanel.setBounds(0, 0, 
-				getWidth() * unitSize+insets.left + insets.right, 
-				getHeight() * unitSize + insets.top + insets.bottom);
-	  }
-		
+	public void draw() {
+		createInitialBoard();
+	}
 		
 	public final char WALL = 'W';
 	public final char PLAYER = 'P';
@@ -113,7 +69,9 @@ public class GameController implements Observer {
 	public final char EMPTYSQUARE = ' ';
 	public final char BOX = 'B';
 	public final char BOXINSTORAGE = 'X';
+	
 	public void createInitialBoard() {
+		
 		String [] boardMap = {
 				"  WWWWW ",//1
 				"WWW   W ",//2
@@ -125,12 +83,27 @@ public class GameController implements Observer {
 				"W   S  W",//8
 				"WWWWWWWW"//9
 		};
+		
 		this.createPanel();
 		this.createBoardShapes(boardMap);
-		mainPanel.setVisible(true);
+		this.drawAllShapes();
 	}
 
+	public void createPanel() {
+		mainPanel = new JFrame("Sokoban");
+		mainPanel.setBackground(new Color(83, 83, 83));
+		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainPanel.setLayout(null);
+		//Size and display the window.
+	    Insets insets = mainPanel.getInsets();
+		mainPanel.setSize(getWidth() * SQUARE_SIZE+insets.left + insets.right, 
+				getHeight() * SQUARE_SIZE + insets.top + insets.bottom);
+		
+		mainPanel.setResizable(false);		
+	}
+		
 	private void createBoardShapes(String[] boardMap) {
+		
 		for (int y = 0; y < boardMap.length; y++) {
 			String line = boardMap[y];
 			for (int x = 0; x < line.length(); x++) {
@@ -138,20 +111,28 @@ public class GameController implements Observer {
 				char character = line.charAt(x);
 				Shape shape = null;
 				switch (character) {
+				case PLAYER:
+					shape = new Player(position);
+					board.getShapes().add(shape);
+					this.mainPanel.addKeyListener((Player)shape);
+					shape.addObserver(this);
+					break;
 				case WALL:
 					shape = new Wall(position);
 					board.getShapes().add(shape);
 					break;
-				case PLAYER:
-					shape = new Player(position);
-					this.mainPanel.addKeyListener((Player)shape);
-					shape.addObserver(this);
+				case BOX:
+					//box
+					shape = new Box(position);
 					board.getShapes().add(shape);
-					{
-					Shape square = new Square(position);
-					square.draw(this.mainPanel);
-					board.getShapes().add(square);
-					}
+					break;
+				case BOXINSTORAGE:
+					//box
+					shape = new Box(position);
+					board.getShapes().add(shape);
+					//floor
+					shape = new Storage(position);
+					board.getShapes().add(shape);
 					break;
 				case STORAGE:
 					shape = new Storage(position);
@@ -161,35 +142,32 @@ public class GameController implements Observer {
 					shape = new Square(position);
 					board.getShapes().add(shape);
 					break;
-				case BOX:
-					shape = new Box(position);
-					board.getShapes().add(shape);
-					{
-					Shape square = new Square(position);
-					square.draw(this.mainPanel);
-					board.getShapes().add(square);
-					}		
-					break;
-				case BOXINSTORAGE:
-					shape = new Storage(position);//TODO CREATE SPECIAL SHAPE OR SOMETHING THAT CHANGES THE BOX COLOR
-					board.getShapes().add(shape);
-					
-					Shape storage = new Box(position);
-					board.getShapes().add(storage);
-					storage.draw(this.mainPanel);
-					break;
-
 				default:
 					break;
-				}
-				shape.draw(this.mainPanel);
-				
+				}				
 			}
 		}
+
+		//Generate empty squares
+		ArrayList<Shape> emptySquares = new ArrayList<>();
+		for (Shape shape : this.board.getShapes()) {
+			if (!(shape instanceof Square) && !(shape instanceof Wall)) {
+				Square floor = new Square(shape.getPosition());
+				emptySquares.add(floor);
+			}
+		}
+		this.board.getShapes().addAll(emptySquares);
+		
+		//Sort by zIndex
+		Collections.sort(this.board.getShapes());
 	}
 
-	public void draw() {
-		createInitialBoard();
+	private void drawAllShapes() {
+		for (Shape shape : this.board.getShapes()) {
+			shape.draw(this.mainPanel);
+		}
+
+		this.mainPanel.setVisible(true);
 	}
 
 	/**
@@ -197,30 +175,6 @@ public class GameController implements Observer {
 	 */
 	public JFrame getMainPanel() {
 		return mainPanel;
-	}
-
-	public boolean move(Shape player, Direction dir) {
-		Position next = player.getPosition();
-
-		Shape shape2 = getNextShape(next, dir);
-
-		if (collision.collide(player, shape2)) {
-			// Push
-			next = shape2.getPosition();
-			Shape shape3 = getNextShape(next, dir);
-			if (collision.collide(shape2, shape3)) {
-				return false;
-			} else {
-				// move shape 1 and shape 2
-				shape2.move(dir);
-				player.move(dir);
-				return true;
-			}
-		}
-		// simple move
-		player.move(dir);
-		return true;
-
 	}
 
 	public void play(Shape shape1, Direction direction) {
@@ -237,18 +191,17 @@ public class GameController implements Observer {
 			if (collision.collide(shape2, shape3)) {
 				return;
 			} else {
-				// Push
-				// move shape 1 and shape 2
+				// Push: move shape 1 and shape 2
 				shape2.move(direction);
+				shape2.draw(mainPanel);
 				shape1.move(direction);
+				shape1.draw(mainPanel);
 			}
 		} else if (!collision.collide(shape1, shape2)) {
 			// simple move
 			shape1.move(direction);
+			shape1.draw(mainPanel);
 		}
-		
-		//FIXME this.draw(GameController.getInstance().getMainPanel());
-
 	}
 
 	/**
@@ -291,16 +244,13 @@ public class GameController implements Observer {
 		Direction direction = (Direction) arg;
 		if (o instanceof Player) {
 			Player player = (Player) o;
-			move(player, direction);
-			player.draw(mainPanel);
-			mainPanel.repaint();
+			play(player, direction);
 			//TODO TEST
+//			mainPanel.repaint();
+			
 		}
 	}
 
-	public void initGame() {
-		draw();
-	}
 
 	// class PlayerAdapter extends KeyAdapter {
 	//

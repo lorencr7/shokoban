@@ -19,11 +19,6 @@ public class Board extends Shape {
 		this.shapes = shapes;
 	}
 
-	@Override
-	public void draw(JFrame container) {
-		super.draw(container);
-	}
-
 	public Shape getShapeAt(Position p) {
 		for (Shape s : this.shapes) {
 			if (s.getPosition().equals(p)) {

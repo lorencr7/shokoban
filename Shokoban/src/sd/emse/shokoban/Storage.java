@@ -2,11 +2,12 @@ package sd.emse.shokoban;
 
 import javax.swing.JFrame;
 
-public class Storage extends Shape{
+public class Storage extends Square{
 
 	public Storage(Position position) {
 		super(position);
 		this.setImageName("sokoban/storage.jpg");
+		this.setzOrder(4);
 	}
 	
 
