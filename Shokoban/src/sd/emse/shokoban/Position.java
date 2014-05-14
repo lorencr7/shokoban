@@ -33,8 +33,8 @@ public class Position {
 	 * @param pos
 	 */
 	public Position(Position pos) {
-		this.x=pos.x;
-		this.y=pos.y;
+		this.x = pos.x;
+		this.y = pos.y;
 	}
 
 	public int getLengthX() {
@@ -45,20 +45,19 @@ public class Position {
 		return this.y * GameController.SQUARE_SIZE;
 	}
 
-	public Position obtainNewPosition(Position pos, String direction) {
-		Position posAux = new Position(pos.getX(), pos.getY());
+	public Position getNextPosition(Direction direction) {
+		Position posAux = new Position(this);
 		switch (direction) {
-		case "North":
+		case NORTH:
 			posAux.setY(posAux.getY() - 1);
 			break;
-		case "South":
+		case SOUTH:
 			posAux.setY(posAux.getY() + 1);
 			break;
-
-		case "East":
+		case EAST:
 			posAux.setX(posAux.getX() + 1);
 			break;
-		case "West":
+		case WEST:
 			posAux.setX(posAux.getX() - 1);
 			break;
 		default:
@@ -66,22 +65,42 @@ public class Position {
 		}
 		return posAux;
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
+	
+	public Position getPreviousPosition(Direction direction) {
+		Position posAux = new Position(this);
+		switch (direction) {
+		case NORTH:
+			posAux.setY(posAux.getY() + 1);
+			break;
+		case SOUTH:
+			posAux.setY(posAux.getY() - 1);
+			break;
+		case EAST:
+			posAux.setX(posAux.getX() - 1);
+			break;
+		case WEST:
+			posAux.setX(posAux.getX() + 1);
+			break;
+		default:
+			break;
+		}
+		return posAux;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Position) {
-			Position other = (Position) obj;
-			return (other.x== x && other.y == y);
+			Position position = (Position) obj;
+			if (position.x == this.x && position.y == this.y) {
+				return true;
+			}
+			return false;
+		} else {
+			return false;
 		}
-		return super.equals(obj);
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+
 	@Override
 	public String toString() {
 		return "(" +x + "," + y  +")";
