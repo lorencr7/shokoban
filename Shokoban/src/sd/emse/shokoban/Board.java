@@ -77,7 +77,7 @@ public class Board extends Shape {
 					shape = new Box(position);
 					break;
 				case BOXINSTORAGE:
-					shape = new Storage(position);//TODO CREATE SPECIAL SHAPE OR SOMETHING THAT CHANGES THE BOX COLOR		
+					shape = new Storage(position);	
 					Shape storage = new Box(position);
 					this.getShapes().add(storage);
 				default:
