@@ -134,7 +134,7 @@ public class GameController implements KeyListener {
 				default:
 					break;
 				}
-				if (character != EMPTYSQUARE) {
+				if (shape != null) {
 					board.getShapes().add(shape);
 					shape.draw(this.mainPanel);
 				}
