@@ -3,9 +3,9 @@ package sd.emse.shokoban;
 import java.util.ArrayList;
 
 
-public abstract class Collision extends Shape {
+public abstract class Collisionable extends Shape {
 
-	public Collision(Position position) {
+	public Collisionable(Position position) {
 		super(position);
 	}
 
@@ -17,9 +17,9 @@ public abstract class Collision extends Shape {
 	}
 
 	private boolean isCollisionable(Shape shape) {
-		return (shape instanceof Collision);
+		return (shape instanceof Collisionable);
 	}
-	
+
 	public Shape findCollisionableShape(ArrayList<Shape> shapes) {
 		for (Shape shape : shapes) {
 			if (this.collide(this, shape)) {

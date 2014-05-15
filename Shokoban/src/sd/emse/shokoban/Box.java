@@ -2,7 +2,7 @@ package sd.emse.shokoban;
 
 import java.util.ArrayList;
 
-public class Box extends Collision {
+public class Box extends Collisionable {
 	
 	public Box(Position position) {
 		super(position);
