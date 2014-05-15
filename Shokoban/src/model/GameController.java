@@ -23,13 +23,13 @@ public class GameController implements KeyListener {
 
 	// Constants
 	public static final int SQUARE_SIZE = 80;
-	private static final int BOARD_WIDTH = 8;
-	private static final int BOARD_HEIGHT = 9;
+	//private static int BOARD_WIDTH;
+	//private static int BOARD_HEIGHT;
 
 	private Board board;
 	private JFrame mainPanel;
-	private int width = BOARD_WIDTH;
-	private int height = BOARD_HEIGHT;
+	private int width = 0;
+	private int height = 0;
 
 	public GameController() {
 		board = new Board(0,0);
@@ -81,6 +81,11 @@ public class GameController implements KeyListener {
 				"W   S  W",//8
 				"WWWWWWWW"//9
 		};
+		
+		for (String string : boardMap) {
+			this.width = Math.max(this.width, string.length());
+		}
+		this.height = boardMap.length;
 
 		this.createPanel();
 		this.createBoardShapes(boardMap);
@@ -90,7 +95,6 @@ public class GameController implements KeyListener {
 
 	public void createPanel() {
 		mainPanel = new JFrame("Sokoban");
-		mainPanel.setBackground(new Color(83, 83, 83));
 		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel.setLayout(null);
 		//Size and display the window.
