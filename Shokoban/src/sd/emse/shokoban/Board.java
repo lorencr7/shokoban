@@ -9,7 +9,6 @@ public class Board extends Shape {
 	private final char WALL = 'W';
 	private final char PLAYER = 'P';
 	private final char STORAGE = 'S';
-	private final char EMPTYSQUARE = ' ';
 	private final char BOX = 'B';
 	private final char BOXINSTORAGE = 'X';
 

@@ -9,14 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import sd.emse.shokoban.Board;
-import sd.emse.shokoban.Box;
 import sd.emse.shokoban.Direction;
-import sd.emse.shokoban.Player;
-import sd.emse.shokoban.Position;
 import sd.emse.shokoban.Shape;
-import sd.emse.shokoban.Square;
-import sd.emse.shokoban.Storage;
-import sd.emse.shokoban.Wall;
 
 public class GameController implements KeyListener {
 
