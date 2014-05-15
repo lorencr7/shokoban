@@ -53,7 +53,7 @@ public abstract class Shape extends Observable implements Cloneable{
 
 	public void draw(JFrame container) {
 		if (this.image == null) {
-			ImageIcon imageIcon = new ImageIcon(this.imageName);
+			ImageIcon imageIcon = new ImageIcon(getClass().getClassLoader().getResource(imageName));
 			this.image = new JLabel(imageIcon);
 			container.getLayeredPane().add(this.image, this.index);
 		}
