@@ -12,9 +12,6 @@ public class Board extends Shape {
 	private final char BOX = 'B';
 	private final char BOXINSTORAGE = 'X';
 
-	/*public Board(int x, int y) {
-		super(new Position(x, y));
-	}*/
 	public Board (String[] boardMap) {
 		this.createInitialBoard(boardMap);
 	}
@@ -60,7 +57,6 @@ public class Board extends Shape {
 	
 
 	private void createInitialBoard(String[] boardMap) {
-
 		for (int y = 0; y < boardMap.length; y++) {
 			String line = boardMap[y];
 			for (int x = 0; x < line.length(); x++) {
