@@ -22,8 +22,6 @@ public class GameController implements KeyListener {
 
 	// Constants
 	public static final int SQUARE_SIZE = 80;
-	//private static int BOARD_WIDTH;
-	//private static int BOARD_HEIGHT;
 
 	private Board board;
 	private JFrame mainPanel;
@@ -31,7 +29,7 @@ public class GameController implements KeyListener {
 	private int height = 0;
 
 	public GameController() {
-		board = new Board(0,0);
+		
 	}
 
 	public int getWidth() {
@@ -52,23 +50,10 @@ public class GameController implements KeyListener {
 
 
 	public void initGame() {
-		draw();
-	}
-
-	public void draw() {
 		createInitialBoard();
 	}
-
-	public final char WALL = 'W';
-	public final char PLAYER = 'P';
-	public final char STORAGE = 'S';
-	public final char EMPTYSQUARE = ' ';
-	public final char BOX = 'B';
-	public final char BOXINSTORAGE = 'X';
-
-	public void createInitialBoard() {
-
-
+	
+	private void createInitialBoard() {
 		String [] boardMap = {
 				"  WWWWW ",//1
 				"WWW   W ",//2
@@ -85,11 +70,10 @@ public class GameController implements KeyListener {
 			this.width = Math.max(this.width, string.length());
 		}
 		this.height = boardMap.length;
-
+		this.board = new Board(boardMap);	
 		this.createPanel();
-		this.createBoardShapes(boardMap);
 		this.board.draw(mainPanel);
-		this.mainPanel.setVisible(true);		
+		this.mainPanel.setVisible(true);	
 	}
 
 	public void createPanel() {
@@ -104,51 +88,6 @@ public class GameController implements KeyListener {
 		mainPanel.setResizable(false);		
 		this.mainPanel.addKeyListener(this);
 	}
-
-	private void createBoardShapes(String[] boardMap) {
-
-		for (int y = 0; y < boardMap.length; y++) {
-			String line = boardMap[y];
-			for (int x = 0; x < line.length(); x++) {
-				Position position = new Position(x,y);
-				char character = line.charAt(x);
-				Shape shape = null;
-				switch (character) {
-				case WALL:
-					shape = new Wall(position);
-					break;
-				case PLAYER:
-					shape = new Player(position);
-					break;
-				case STORAGE:
-					shape = new Storage(position);
-					break;
-				case BOX:
-					shape = new Box(position);
-					break;
-				case BOXINSTORAGE:
-					shape = new Storage(position);//TODO CREATE SPECIAL SHAPE OR SOMETHING THAT CHANGES THE BOX COLOR		
-					Shape storage = new Box(position);
-					board.getShapes().add(storage);
-					storage.draw(this.mainPanel);
-				default:
-					break;
-				}
-				if (shape != null) {
-					board.getShapes().add(shape);
-					shape.draw(this.mainPanel);
-				}
-
-				Shape square = new Square(position);
-				square.draw(this.mainPanel);
-				board.getShapes().add(square);
-
-				//Sort by zIndex
-				//Collections.sort(this.board.getShapes());
-			}
-		}
-	}
-
 
 	/**
 	 * @return the mainPanel
@@ -201,7 +140,7 @@ public class GameController implements KeyListener {
 		}
 	}
 
-	void checkWinConditions () {
+	private void checkWinConditions () {
 		ArrayList<Shape> boxes = this.board.getBoxes();
 		ArrayList<Shape> storages = this.board.getStorages();
 		int numberOfBoxesInStorages = 0;
