@@ -36,10 +36,4 @@ public class Box extends Collision {
 			}
 		}
 	}
-	
-	@Override
-	public Box clone() {
-		Box shape = new Box(this.getPosition());
-		return shape;
-    }
 }

@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public abstract class Shape extends Observable implements Cloneable{
+public abstract class Shape extends Observable {
 	private Position position;
 	private String imageName;
 	JLabel image;
@@ -73,16 +73,6 @@ public abstract class Shape extends Observable implements Cloneable{
 		}
 		return shapesAtPosition;
 	}
-	
-	@Override
-	public Shape clone() {
-        try {
-            return (Shape) super.clone();
-        } catch (CloneNotSupportedException e) {        
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
-    }
 	
 	public void performMove (Direction direction) {
 		Position position = new Position(this.getPosition());

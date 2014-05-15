@@ -14,13 +14,7 @@ public class Board extends Shape {
 	public ArrayList<Shape> getShapes() {
 		return shapes;
 	}
-	public ArrayList<Shape> getCopyOfShapes() {
-		ArrayList<Shape> shapes = new ArrayList<>();
-		for (Shape shape : this.shapes) {
-			shapes.add(shape.clone());
-		}
-		return shapes;
-	}
+	
 
 	public void setShapes(ArrayList<Shape> shapes) {
 		this.shapes = shapes;

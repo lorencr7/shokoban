@@ -25,6 +25,7 @@ public class Player extends Collision {
 					for (Shape shape2 : nextNextShapes) {//Busco alguna figura colisionable en la siguiente de la siguiente
 						if (this.isCollisionable(shape2)) {
 							collisionableFoundOnNextNext = true;
+							break;
 						}
 					}
 					if (!collisionableFoundOnNextNext) {//Si la siguiente de la siguiente no es colisionable, me puedo mover
@@ -37,10 +38,4 @@ public class Player extends Collision {
 			this.performMove(direction);
 		}
 	}
-	
-	@Override
-	public Player clone() {
-		Player shape = new Player(this.getPosition());
-		return shape;
-    }
 }
