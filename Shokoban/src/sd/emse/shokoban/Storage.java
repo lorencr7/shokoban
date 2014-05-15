@@ -1,21 +1,13 @@
 package sd.emse.shokoban;
 
-import javax.swing.JFrame;
+import java.util.ArrayList;
 
-public class Storage extends Square{
 
+
+public class Storage extends Shape {
 	public Storage(Position position) {
 		super(position);
 		this.setImageName("sokoban/storage.jpg");
 		this.setIndex(1);
-	}
-	
-
-	/* (non-Javadoc)
-	 * @see sd.emse.shokoban.Shape#isMovable()
-	 */
-	@Override
-	public boolean isMovable() {
-		return false;
 	}
 }

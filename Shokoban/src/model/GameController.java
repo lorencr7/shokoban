@@ -2,16 +2,15 @@ package model;
 
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import sd.emse.shokoban.Board;
 import sd.emse.shokoban.Box;
-import sd.emse.shokoban.Collision;
 import sd.emse.shokoban.Direction;
 import sd.emse.shokoban.Player;
 import sd.emse.shokoban.Position;
@@ -20,7 +19,7 @@ import sd.emse.shokoban.Square;
 import sd.emse.shokoban.Storage;
 import sd.emse.shokoban.Wall;
 
-public class GameController implements Observer {
+public class GameController implements KeyListener {
 
 	// Constants
 	public static final int SQUARE_SIZE = 80;
@@ -28,14 +27,12 @@ public class GameController implements Observer {
 	private static final int BOARD_HEIGHT = 9;
 
 	private Board board;
-	private Collision collision;
 	private JFrame mainPanel;
 	private int width = BOARD_WIDTH;
 	private int height = BOARD_HEIGHT;
 
 	public GameController() {
 		board = new Board(0,0);
-		collision = new Collision();
 	}
 
 	public int getWidth() {
@@ -72,6 +69,7 @@ public class GameController implements Observer {
 
 	public void createInitialBoard() {
 
+
 		String [] boardMap = {
 				"  WWWWW ",//1
 				"WWW   W ",//2
@@ -101,6 +99,7 @@ public class GameController implements Observer {
 				getHeight() * SQUARE_SIZE + insets.top + insets.bottom + 20);
 
 		mainPanel.setResizable(false);		
+		this.mainPanel.addKeyListener(this);
 	}
 
 	private void createBoardShapes(String[] boardMap) {
@@ -117,8 +116,6 @@ public class GameController implements Observer {
 					break;
 				case PLAYER:
 					shape = new Player(position);
-					this.mainPanel.addKeyListener((Player)shape);
-					shape.addObserver(this);
 					break;
 				case STORAGE:
 					shape = new Storage(position);
@@ -157,138 +154,81 @@ public class GameController implements Observer {
 		return mainPanel;
 	}
 
-	public void play(Shape shape1, Direction direction) {
-		Position next = shape1.getPosition();
-		Shape shape2 = getNextShape(next, direction);
-		if (shape2 == null ) {
-			return;
-		}
-		if (shape2.isMovable()) {
-			Shape shape3 = getNextShape(shape2.getPosition(), direction);
-			if (shape3 == null ) {
-				return;
-			}
-			if (collision.collide(shape2, shape3)) {
-				return;
-			} else {
-				// Push: move shape 1 and shape 2
-				shape2.move(direction);
-				shape2.draw(mainPanel);
-				shape1.move(direction);
-				shape1.draw(mainPanel);
-			}
-		} else if (!collision.collide(shape1, shape2)) {
-			// simple move
-			shape1.move(direction);
-			shape1.draw(mainPanel);
-		}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	/**
-	 * @param pos
-	 * @param direction
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
 	 */
-	public Shape getNextShape(Position pos, Direction direction) {
-		Position nextPos = new Position(pos);
-		switch (direction) {
-		case NORTH:
-			nextPos.setY(nextPos.getY() - 1);
+	@Override
+	public void keyPressed(KeyEvent e) {
+		Direction direction = null;
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_UP:
+			direction = Direction.NORTH;
 			break;
-		case SOUTH:
-			nextPos.setY(nextPos.getY() + 1);
+		case KeyEvent.VK_DOWN:
+			direction = Direction.SOUTH;
 			break;
-
-		case EAST:
-			nextPos.setX(nextPos.getX() + 1);
+		case KeyEvent.VK_LEFT:
+			direction = Direction.WEST;
 			break;
-		case WEST:
-			nextPos.setX(nextPos.getX() - 1);
+		case KeyEvent.VK_RIGHT:
+			direction = Direction.EAST;
 			break;
-
 		default:
 			break;
 		}
+		if (direction != null) {
+			ArrayList<Shape> boardState = this.board.getShapes();
+			for (Shape shape : this.board.getShapes()) {//Mando mover todas las figuras
+				shape.move(direction, boardState);
+			}
+			this.checkWinConditions();
+		}
+	}
 
-		for (Shape s : board.getShapes()) {
-			if (s.getPosition().equals(nextPos)) {
-				return s;
+	void checkWinConditions () {
+		ArrayList<Shape> boxes = this.board.getBoxes();
+		ArrayList<Shape> storages = this.board.getStorages();
+		int numberOfBoxesInStorages = 0;
+		boolean victory = false;
+		for (Shape storage : storages) {
+			for (Shape box : boxes) {
+				if (box.getPosition().equals(storage.getPosition())) {
+					numberOfBoxesInStorages++;
+					break;
+				}
 			}
 		}
-		return null;
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		System.out.println("player moved");
-		Direction direction = (Direction) arg;
-		if (o instanceof Player) {
-			Player player = (Player) o;
-			play(player, direction);
-			//TODO TEST
-			//			mainPanel.repaint();
-
+		System.out.println(numberOfBoxesInStorages + " vs " + storages.size());
+		victory = numberOfBoxesInStorages == storages.size();
+		if (victory) {
+			JOptionPane.showMessageDialog(this.mainPanel, "Congratulations!! you won the game!!");
+			this.mainPanel.removeKeyListener(this);
+			System.out.println("Congratulations!! you won the game!!");
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
 
-	// class PlayerAdapter extends KeyAdapter {
-	//
-	// /**
-	// *
-	// */
-	// public PlayerAdapter() {
-	//
-	// }
-	//
-	// public void keyPressed(KeyEvent e) {
-	// Shape player = (Shape) getBoard().getShapes().get(
-	// getBoard().getShapes().size() - 1);
-	//
-	// if (player.pos.getY() <= 0) {
-	// player.pos.setY(0);
-	// } else if (player.pos.getY() > (getHeight() - 1)) {
-	// player.pos.setY(getHeight() - 1);
-	// }
-	//
-	// if (player.pos.getX() <= 0) {
-	// player.pos.setX(0);
-	// } else if (player.pos.getX() > (getWidth() - 1)) {
-	// player.pos.setX(getWidth() - 1);
-	// }
-	//
-	// switch (e.getKeyCode()) {
-	//
-	// case KeyEvent.VK_UP:
-	//
-	// collide(player, Direction.NORTH);
-	//
-	// // pos.setY(pos.getY() - 1);
-	//
-	// break;
-	// case KeyEvent.VK_DOWN:
-	//
-	// collide(player, Direction.SOUTH);
-	// // pos.setY(pos.getY() + 1);
-	// break;
-	// case KeyEvent.VK_LEFT:
-	// collide(player, Direction.WEST);
-	// // pos.setX(pos.getX() - 1);
-	// break;
-	// case KeyEvent.VK_RIGHT:
-	// collide(player, Direction.EAST);
-	// // pos.setX(pos.getX() + 1);
-	// break;
-	// default:
-	// break;
-	// }
-	//
-	// board.getShapes().get(
-	// getBoard().getShapes().size() - 1).setPosition(player.getPosition());
-	// board.getShapes().get(
-	// getBoard().getShapes().size() - 1).draw(getMainPanel());
-	//
-	// }
-	// }
+	}
 
 }

@@ -1,12 +1,13 @@
 package sd.emse.shokoban;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-public abstract class Shape extends Observable implements Comparable<Shape> {
+public abstract class Shape extends Observable {
 	private Position position;
 	private String imageName;
 	JLabel image;
@@ -18,7 +19,7 @@ public abstract class Shape extends Observable implements Comparable<Shape> {
 	}
 
 	public void setPosition(Position position) {
-		this.position = position;
+		this.position = new Position(position);
 	}
 
 	public String getImageName() {
@@ -43,47 +44,58 @@ public abstract class Shape extends Observable implements Comparable<Shape> {
 
 	public Shape(Position position) {
 		super();
-		this.position = position;
+		this.position = new Position(position);
+	}
+	public Shape (Shape shape) {
+		super();
+		this.position = shape.position;
 	}
 
 	public void draw(JFrame container) {
 		if (this.image == null) {
-			ImageIcon imageIcon = new ImageIcon(this.imageName);
+			ImageIcon imageIcon = new ImageIcon(getClass().getClassLoader().getResource(imageName));
 			this.image = new JLabel(imageIcon);
 			container.getLayeredPane().add(this.image, this.index);
 		}
 		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
 	}
 
-	public void move(Direction direction) {
-
+	public  void move(Direction direction, ArrayList<Shape> shapes) {
+		
+	}
+	
+	public ArrayList<Shape> getShapesAt(Position p, ArrayList<Shape> shapes) {
+		ArrayList<Shape> shapesAtPosition = new ArrayList<>();
+		for (Shape shape : shapes) {
+			if (shape.getPosition().equals(p)) {
+				shapesAtPosition.add(shape);
+			}
+		}
+		return shapesAtPosition;
+	}
+	
+	public void performMove (Direction direction) {
+		Position position = new Position(this.getPosition());
 		switch (direction) {
 		case NORTH:
-			this.position.setY(this.position.getY() - 1);
+			position.setY(position.getY() - 1);
 			break;
 		case SOUTH:
-			this.position.setY(this.position.getY() + 1);
+			position.setY(position.getY() + 1);
 			break;
 
 		case EAST:
-			this.position.setX(this.position.getX() + 1);
+			position.setX(position.getX() + 1);
 			break;
 		case WEST:
-			this.position.setX(this.position.getX() - 1);
+			position.setX(position.getX() - 1);
 			break;
 
 		default:
 			break;
 		}
+		this.setPosition(position);
+		this.draw(null);
 	}
-
-	public abstract boolean isMovable();
-
-	/**
-	 * This allow sort by z-index
-	 */
-	@Override
-	public int compareTo(Shape o) {
-		return index.compareTo(o.index);
-	}
+	
 }

@@ -14,6 +14,7 @@ public class Board extends Shape {
 	public ArrayList<Shape> getShapes() {
 		return shapes;
 	}
+	
 
 	public void setShapes(ArrayList<Shape> shapes) {
 		this.shapes = shapes;
@@ -28,6 +29,27 @@ public class Board extends Shape {
 		return null;
 	}
 	
+	public ArrayList<Shape> getBoxes() {
+		ArrayList<Shape> shapes = new ArrayList<>();
+		for (Shape shape : this.shapes) {
+			if (shape instanceof Box) {
+				shapes.add(shape);
+			}
+		}
+		return shapes;
+	}
+	
+	public ArrayList<Shape> getStorages() {
+		ArrayList<Shape> shapes = new ArrayList<>();
+		for (Shape shape : this.shapes) {
+			if (shape instanceof Storage) {
+				shapes.add(shape);
+			}
+		}
+		return shapes;
+	}
+	
+
 	@Override
 	public void draw(JFrame container) {
 		for (Shape shape : shapes) {
@@ -36,7 +58,6 @@ public class Board extends Shape {
 	}
 
 	@Override
-	public boolean isMovable() {
-		return false;
+	public void move(Direction direction, ArrayList<Shape> shapes) {
 	}
 }
