@@ -25,13 +25,8 @@ public class Box extends Collision {
 		if (playerFound) {//Si he encontrado el jugador, puede que me tenga que mover
 			Position nextPosition = this.getPosition().getNextPosition(direction);
 			ArrayList<Shape> nextShapes = this.getShapesAt(nextPosition, shapes);
-			boolean collisionableFoundOnNext = false;
-			for (Shape shape : nextShapes) {//busco entre las figuras de la casilla siguiente
-				if (this.collide(this, shape)) {
-					collisionableFoundOnNext = true;
-				}
-			}
-			if (!collisionableFoundOnNext) {//Si en la siguiente no hay ninguna colisionable, me muevo
+			Shape collisionableShape = this.findCollisionableShape(nextShapes);
+			if (collisionableShape == null) {
 				this.performMove(direction);
 			}
 		}

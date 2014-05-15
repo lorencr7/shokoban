@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import model.GameController;
+
 public abstract class Shape extends Observable {
 	private Position position;
 	private String imageName;
@@ -57,7 +59,7 @@ public abstract class Shape extends Observable {
 			this.image = new JLabel(imageIcon);
 			container.getLayeredPane().add(this.image, this.index);
 		}
-		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), 80, 80);
+		this.image.setBounds(this.position.getLengthX(), this.position.getLengthY(), GameController.SQUARE_SIZE, GameController.SQUARE_SIZE);
 	}
 
 	public  void move(Direction direction, ArrayList<Shape> shapes) {

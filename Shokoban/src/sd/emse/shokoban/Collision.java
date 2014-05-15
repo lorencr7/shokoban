@@ -1,5 +1,7 @@
 package sd.emse.shokoban;
 
+import java.util.ArrayList;
+
 
 public abstract class Collision extends Shape {
 
@@ -16,5 +18,14 @@ public abstract class Collision extends Shape {
 
 	private boolean isCollisionable(Shape shape) {
 		return (shape instanceof Collision);
+	}
+	
+	public Shape findCollisionableShape(ArrayList<Shape> shapes) {
+		for (Shape shape : shapes) {
+			if (this.collide(this, shape)) {
+				return shape;
+			}
+		}
+		return null;
 	}
 }
