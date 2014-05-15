@@ -1,7 +1,7 @@
 package sd.emse.shokoban;
 
 
-public class Collision extends Shape {
+public abstract class Collision extends Shape {
 
 	public Collision(Position position) {
 		super(position);
