@@ -27,7 +27,7 @@ public class Box extends Collision {
 			ArrayList<Shape> nextShapes = this.getShapesAt(nextPosition, shapes);
 			boolean collisionableFoundOnNext = false;
 			for (Shape shape : nextShapes) {//busco entre las figuras de la casilla siguiente
-				if (this.isCollisionable(shape)) {
+				if (this.collide(this, shape)) {
 					collisionableFoundOnNext = true;
 				}
 			}

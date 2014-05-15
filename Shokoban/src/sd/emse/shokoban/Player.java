@@ -16,14 +16,14 @@ public class Player extends Collision {
 		ArrayList<Shape> nextShapes = this.getShapesAt(nextPosition, shapes);
 		boolean collisionableFoundOnNext = false;
 		for (Shape shape : nextShapes) {//Miro en las siguientes figuras si hay alguna colisionable
-			if (this.isCollisionable(shape)) {//Si una de las siguientes es colisionable
+			if (this.collide(this, shape)) {//Si una de las siguientes es colisionable
 				collisionableFoundOnNext = true;
 				if (shape instanceof Box) {//Si es una caja, todavia puedo moverme
 					Position nextNextPosition = nextPosition.getNextPosition(direction);
 					ArrayList<Shape> nextNextShapes = this.getShapesAt(nextNextPosition, shapes);
 					boolean collisionableFoundOnNextNext = false;
 					for (Shape shape2 : nextNextShapes) {//Busco alguna figura colisionable en la siguiente de la siguiente
-						if (this.isCollisionable(shape2)) {
+						if (this.collide(shape, shape2)) {
 							collisionableFoundOnNextNext = true;
 							break;
 						}

@@ -14,7 +14,7 @@ public class Collision extends Shape {
 		return false;
 	}
 
-	public boolean isCollisionable(Shape shape) {
+	private boolean isCollisionable(Shape shape) {
 		return (shape instanceof Collision);
 	}
 }
