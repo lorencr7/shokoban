@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
