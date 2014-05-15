@@ -44,7 +44,7 @@ public abstract class Shape extends Observable implements Cloneable{
 
 	public Shape(Position position) {
 		super();
-		this.position = position;
+		this.position = new Position(position);
 	}
 	public Shape (Shape shape) {
 		super();
