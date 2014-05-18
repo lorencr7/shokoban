@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 
 import model.GameController;
 
-public abstract class Shape extends Observable {
+public abstract class Shape  {
 	private Position position;
 	private String imageName;
 	JLabel image;
