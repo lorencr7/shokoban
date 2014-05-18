@@ -48,10 +48,6 @@ public abstract class Shape extends Observable {
 		super();
 		this.position = new Position(position);
 	}
-	public Shape (Shape shape) {
-		super();
-		this.position = shape.position;
-	}
 
 	public void draw(JFrame container) {
 		if (this.image == null) {
