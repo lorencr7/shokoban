@@ -12,42 +12,49 @@ import sd.emse.shokoban.Board;
 import sd.emse.shokoban.Direction;
 import sd.emse.shokoban.Shape;
 
+/**
+ * Class that handles keyboard events from the user and processes the rules of the game.  
+ */
 public class GameController implements KeyListener {
 
-	// Constants
+	/**
+	 * Size in pixels of the squares in the board 
+	 */
 	public static final int SQUARE_SIZE = 80;
-
-	private Board board;
-	private JFrame mainPanel;
+	/**
+	 * Number of horizontal squares of the board
+	 */
 	private int width = 0;
+	/**
+	 * Number of vertical squares of the board
+	 */
 	private int height = 0;
-
-	public GameController() {
-		
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-
+	
+	private Board board;
+	
+	private JFrame mainPanel;
+	
+	
 	public void initGame() {
 		createInitialBoard();
 	}
 	
+	
+	/**
+	 * Creation of the board. For changing the setup of the board use the following char codes,
+	 * (each line represent a row in the real board).
+	 * The codes of the shapes are: <br>
+	 * <ul>
+	 * 	<li>P: Player</li>
+	 *  <li>W: Wall</li>
+	 *  <li>S: Storage</li>
+	 *  <li>B: Box</li>
+	 *  <li>X: Box in storage</li>
+	 *  <li>' ': A blank is an empty square</li>
+	 * </ul>
+	 */
 	private void createInitialBoard() {
+		
 		String [] boardMap = {
 				"  WWWWW ",//1
 				"WWW   W ",//2
@@ -70,41 +77,51 @@ public class GameController implements KeyListener {
 		this.mainPanel.setVisible(true);	
 	}
 
-	public void createPanel() {
+	/**
+	 * Set size and properties of the main window that contains the board.
+	 */
+	private void createPanel() {
 		mainPanel = new JFrame("Sokoban");
 		mainPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainPanel.setLayout(null);
-		//Size and display the window.
+		
 		Insets insets = mainPanel.getInsets();
-		mainPanel.setSize(getWidth() * SQUARE_SIZE+insets.left + insets.right, 
-				getHeight() * SQUARE_SIZE + insets.top + insets.bottom + 20);
+		mainPanel.setSize(this.width * SQUARE_SIZE+insets.left + insets.right, 
+				this.height * SQUARE_SIZE + insets.top + insets.bottom + 20);
 
 		mainPanel.setResizable(false);		
 		this.mainPanel.addKeyListener(this);
 	}
 
 	/**
-	 * @return the mainPanel
+	 * This method is called in each player's move to check if the player has won. 
 	 */
-	public JFrame getMainPanel() {
-		return mainPanel;
+	private void checkWinConditions () {
+		ArrayList<Shape> boxes = this.board.getBoxes();
+		ArrayList<Shape> storages = this.board.getStorages();
+		int numberOfBoxesInStorages = 0;
+		boolean victory = false;
+		for (Shape storage : storages) {
+			for (Shape box : boxes) {
+				if (box.getPosition().equals(storage.getPosition())) {
+					numberOfBoxesInStorages++;
+					break;
+				}
+			}
+		}
+		
+		System.out.println("Boxes in target: "+numberOfBoxesInStorages + " vs total storage squares: " + storages.size());
+		
+		victory = numberOfBoxesInStorages == storages.size();
+		if (victory) {
+			JOptionPane.showMessageDialog(this.mainPanel, "Congratulations!! you have won the game!!");
+			this.mainPanel.removeKeyListener(this);
+			System.out.println("Congratulations!! you won the game!!");
+		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
-	 */
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	/**
+	 * Handling of key events: It processes the keys for movement (the arrows up, dowm, right, left)
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -125,46 +142,24 @@ public class GameController implements KeyListener {
 		default:
 			break;
 		}
+		
 		if (direction != null) {
+			
+			// Move shapes in the desired direction: Only movable shapes will respond
 			ArrayList<Shape> boardState = this.board.getShapes();
-			for (Shape shape : this.board.getShapes()) {//Mando mover todas las figuras
+			for (Shape shape : this.board.getShapes()) {
 				shape.move(direction, boardState);
 			}
 			this.checkWinConditions();
 		}
 	}
 
-	private void checkWinConditions () {
-		ArrayList<Shape> boxes = this.board.getBoxes();
-		ArrayList<Shape> storages = this.board.getStorages();
-		int numberOfBoxesInStorages = 0;
-		boolean victory = false;
-		for (Shape storage : storages) {
-			for (Shape box : boxes) {
-				if (box.getPosition().equals(storage.getPosition())) {
-					numberOfBoxesInStorages++;
-					break;
-				}
-			}
-		}
-		System.out.println(numberOfBoxesInStorages + " vs " + storages.size());
-		victory = numberOfBoxesInStorages == storages.size();
-		if (victory) {
-			JOptionPane.showMessageDialog(this.mainPanel, "Congratulations!! you won the game!!");
-			this.mainPanel.removeKeyListener(this);
-			System.out.println("Congratulations!! you won the game!!");
-		}
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
-	 */
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
