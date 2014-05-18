@@ -1,7 +1,6 @@
 package sd.emse.shokoban;
 
 import java.util.ArrayList;
-import java.util.Observable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
