@@ -3,9 +3,8 @@
  */
 package sd.emse.shokoban;
 
-/**
- * @author user
- *
+/*
+ * This class has the direction that one shape can move
  */
 public enum Direction{
 	NORTH,

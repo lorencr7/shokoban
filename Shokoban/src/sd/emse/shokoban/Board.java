@@ -69,14 +69,14 @@ public class Board extends Shape {
 	public void move(Direction direction, ArrayList<Shape> shapes) {
 	}
 
-	public Shape getShapeAt(Position p) {
-		for (Shape s : this.shapes) {
-			if (s.getPosition().equals(p)) {
-				return s;
-			}
-		}
-		return null;
-	}
+//	public Shape getShapeAt(Position p) {
+//		for (Shape s : this.shapes) {
+//			if (s.getPosition().equals(p)) {
+//				return s;
+//			}
+//		}
+//		return null;
+//	}
 
 	public ArrayList<Shape> getShapes() {
 		return shapes;
