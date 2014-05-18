@@ -25,6 +25,10 @@ public class Board extends Shape {
 		this.shapes = shapes;
 	}
 
+	/**
+	 * @param p
+	 * @return
+	 */
 	public Shape getShapeAt(Position p) {
 		for (Shape s : this.shapes) {
 			if (s.getPosition().equals(p)) {
@@ -34,6 +38,10 @@ public class Board extends Shape {
 		return null;
 	}
 	
+	/**
+	 * Obtain all the boxes that are in the board
+	 * @return 
+	 */
 	public ArrayList<Shape> getBoxes() {
 		ArrayList<Shape> shapes = new ArrayList<>();
 		for (Shape shape : this.shapes) {
@@ -56,6 +64,10 @@ public class Board extends Shape {
 	
 	
 
+	/**
+	 * @param boardMap
+	 * Create the Initial Board with the boardMad that received as parameter.
+	 */
 	private void createInitialBoard(String[] boardMap) {
 		for (int y = 0; y < boardMap.length; y++) {
 			String line = boardMap[y];

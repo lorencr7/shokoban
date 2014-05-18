@@ -49,6 +49,10 @@ public abstract class Shape extends Observable {
 		this.position = new Position(position);
 	}
 
+	/**
+	 * This method draw each figure in the JFrame
+	 * @param container
+	 */
 	public void draw(JFrame container) {
 		if (this.image == null) {
 			ImageIcon imageIcon = new ImageIcon(getClass().getClassLoader().getResource(imageName));
