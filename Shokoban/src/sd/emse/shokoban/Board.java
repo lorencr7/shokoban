@@ -16,57 +16,10 @@ public class Board extends Shape {
 		this.createInitialBoard(boardMap);
 	}
 
-	public ArrayList<Shape> getShapes() {
-		return shapes;
-	}
-	
-
-	public void setShapes(ArrayList<Shape> shapes) {
-		this.shapes = shapes;
-	}
-
 	/**
-	 * @param p
-	 * @return
-	 */
-	public Shape getShapeAt(Position p) {
-		for (Shape s : this.shapes) {
-			if (s.getPosition().equals(p)) {
-				return s;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * Obtain all the boxes that are in the board
-	 * @return 
-	 */
-	public ArrayList<Shape> getBoxes() {
-		ArrayList<Shape> shapes = new ArrayList<>();
-		for (Shape shape : this.shapes) {
-			if (shape instanceof Box) {
-				shapes.add(shape);
-			}
-		}
-		return shapes;
-	}
-	
-	public ArrayList<Shape> getStorages() {
-		ArrayList<Shape> shapes = new ArrayList<>();
-		for (Shape shape : this.shapes) {
-			if (shape instanceof Storage) {
-				shapes.add(shape);
-			}
-		}
-		return shapes;
-	}
-	
-	
-
-	/**
-	 * @param boardMap
-	 * Create the Initial Board with the boardMad that received as parameter.
+	 * This creates the game board according with the coded string array.
+	 * @see GameController.createInitialBoard()
+	 * @param boardMap a text description of the board (each text line represent a row in the board) 
 	 */
 	private void createInitialBoard(String[] boardMap) {
 		for (int y = 0; y < boardMap.length; y++) {
@@ -98,13 +51,12 @@ public class Board extends Shape {
 				if (shape != null) {
 					this.getShapes().add(shape);
 				}
-
+	
 				Shape square = new Square(position);
 				this.getShapes().add(square);
 			}
 		}
 	}
-
 
 	@Override
 	public void draw(JFrame container) {
@@ -115,5 +67,49 @@ public class Board extends Shape {
 
 	@Override
 	public void move(Direction direction, ArrayList<Shape> shapes) {
+	}
+
+	public Shape getShapeAt(Position p) {
+		for (Shape s : this.shapes) {
+			if (s.getPosition().equals(p)) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	public ArrayList<Shape> getShapes() {
+		return shapes;
+	}
+	
+
+	public void setShapes(ArrayList<Shape> shapes) {
+		this.shapes = shapes;
+	}
+
+	/**
+	 * @return Returns all the boxes that are in the board 
+	 */
+	public ArrayList<Shape> getBoxes() {
+		ArrayList<Shape> shapes = new ArrayList<>();
+		for (Shape shape : this.shapes) {
+			if (shape instanceof Box) {
+				shapes.add(shape);
+			}
+		}
+		return shapes;
+	}
+	
+	/**
+ 	 * @return Returns all the storage squares that are in the board
+	 */
+	public ArrayList<Shape> getStorages() {
+		ArrayList<Shape> shapes = new ArrayList<>();
+		for (Shape shape : this.shapes) {
+			if (shape instanceof Storage) {
+				shapes.add(shape);
+			}
+		}
+		return shapes;
 	}
 }
