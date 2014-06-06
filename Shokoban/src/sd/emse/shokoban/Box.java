@@ -15,14 +15,16 @@ public class Box extends Collisionable {
 		Position previousPosition = this.getPosition().getNextPosition(direction);
 		ArrayList<Shape> previousShapes = this.getShapesAt(previousPosition, shapes);
 		ArrayList<Shape> currentShapes = this.getShapesAt(this.getPosition(), shapes);
-		previousShapes.addAll(currentShapes);//Tengo que buscar en la posicion anterior a la que me quiero mover y la mia actual, porque puede ser que el jugador ya se haya movido a mi posicion
+		previousShapes.addAll(currentShapes);
+		//Look in the previous position and my current position: perhaps the player has moved before, 
+		//and it can be occupying my position
 		boolean playerFound = false;
-		for (Shape shape : previousShapes) {//Busco el jugador
+		for (Shape shape : previousShapes) {//Search the player
 			if (shape instanceof Player) {
 				playerFound = true;
 			}
 		}
-		if (playerFound) {//Si he encontrado el jugador, puede que me tenga que mover
+		if (playerFound) {//In this case, I would need to move. 
 			Position nextPosition = this.getPosition().getNextPosition(direction);
 			ArrayList<Shape> nextShapes = this.getShapesAt(nextPosition, shapes);
 			Shape collisionableShape = this.findCollisionableShape(nextShapes);

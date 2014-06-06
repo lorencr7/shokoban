@@ -2,8 +2,8 @@ package sd.emse.shokoban;
 
 import java.util.ArrayList;
 
-/*
- * This class verify if two shapes collide among them
+/**
+ * This class verify if two shapes collide betweem them
  */
 public abstract class Collisionable extends Shape {
 

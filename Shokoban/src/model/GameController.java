@@ -143,9 +143,8 @@ public class GameController implements KeyListener {
 			break;
 		}
 		
+		// Move shapes in the desired direction: Only movable shapes will respond
 		if (direction != null) {
-			
-			// Move shapes in the desired direction: Only movable shapes will respond
 			ArrayList<Shape> boardState = this.board.getShapes();
 			for (Shape shape : this.board.getShapes()) {
 				shape.move(direction, boardState);

@@ -76,26 +76,7 @@ public abstract class Shape  {
 	}
 	
 	public void performMove (Direction direction) {
-		Position position = new Position(this.getPosition());
-		switch (direction) {
-		case NORTH:
-			position.setY(position.getY() - 1);
-			break;
-		case SOUTH:
-			position.setY(position.getY() + 1);
-			break;
-
-		case EAST:
-			position.setX(position.getX() + 1);
-			break;
-		case WEST:
-			position.setX(position.getX() - 1);
-			break;
-
-		default:
-			break;
-		}
-		this.setPosition(position);
+		this.setPosition(position.getNextPosition(direction));
 		this.draw(null);
 	}
 
