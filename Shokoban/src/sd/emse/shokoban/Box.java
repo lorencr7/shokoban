@@ -31,4 +31,9 @@ public class Box extends Collisionable {
 			}
 		}
 	}
+	
+	@Override
+	public boolean canBePushed() {
+		return true;
+	}
 }

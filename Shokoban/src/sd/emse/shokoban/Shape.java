@@ -98,5 +98,9 @@ public abstract class Shape  {
 		this.setPosition(position);
 		this.draw(null);
 	}
+
+	public boolean canBePushed() {
+		return false;
+	}
 	
 }

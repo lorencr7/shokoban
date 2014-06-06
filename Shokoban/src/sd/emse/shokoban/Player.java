@@ -17,7 +17,7 @@ public class Player extends Collisionable {
 		if (collisionableShape == null) {
 			this.performMove(direction);
 		} else {
-			if (collisionableShape instanceof Box) {
+			if (collisionableShape.canBePushed()) {
 				Position nextNextPosition = nextPosition.getNextPosition(direction);
 				ArrayList<Shape> nextNextShapes = this.getShapesAt(nextNextPosition, shapes);
 				Shape collisionableShape2 = this.findCollisionableShape(nextNextShapes);
